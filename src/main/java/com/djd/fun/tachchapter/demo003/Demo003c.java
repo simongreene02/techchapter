@@ -40,9 +40,7 @@ public class Demo003c {
             try {
               // This call blocks main thread.
               return future.get();
-            } catch (InterruptedException e) {
-              throw Throwables.propagate(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
               throw Throwables.propagate(e);
             }
           })

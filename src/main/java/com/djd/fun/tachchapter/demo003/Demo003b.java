@@ -61,9 +61,7 @@ public class Demo003b {
     futures.stream().map(future -> {
       try {
         return future.get();
-      } catch (InterruptedException e) {
-        throw Throwables.propagate(e);
-      } catch (ExecutionException e) {
+      } catch (InterruptedException | ExecutionException e) {
         throw Throwables.propagate(e);
       }
     }).forEach(result -> log.info("result: {}", result));
