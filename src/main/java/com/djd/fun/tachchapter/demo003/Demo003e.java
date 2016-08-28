@@ -16,48 +16,41 @@ import org.slf4j.LoggerFactory;
 /**
  * This class is to demo how to use jdk8 concurrency API
  * <p>
- * Part 4) cached thread pool executor with {@link java.util.concurrent.Callable} tasks
+ * Part 5) jdk8's work-stealing thread pool executor with {@link java.util.concurrent.Callable} tasks
  * using {@link ExecutorService#invokeAny(Collection)}.
  * <p>
- * Note: cached thread pool size dynamically changes depends on thread availability.
+ * Note: work-stealing thread pool utilize computer's available cores to maximize parallelism.
  * <p>
  * {@link ExecutorService#invokeAny(Collection)} will block main thread until first {@link Callable}
  * is completed.
  * <p>
- * From {@link Executors} javadoc
- * These pools will typically improve the performance
- * of programs that execute many short-lived asynchronous tasks.
- * Threads that have
- * not been used for sixty seconds are terminated and removed from
- * the cache.
  *
  * @author JGD
  * @since 8/28/16
  */
-public class Demo003d {
-  private static final Logger log = LoggerFactory.getLogger(Demo003d.class);
+public class Demo003e {
+  private static final Logger log = LoggerFactory.getLogger(Demo003e.class);
 
   public static void main(String[] params) {
-    log.info("TOP Demo003d");
+    log.info("TOP Demo003e");
     ExecutorService service = null;
     try {
-      // Create dynamically sized thread pool
-      service = Executors.newCachedThreadPool();
+      // creates ForkJoinPool that utilize the all available cores
+      service = Executors.newWorkStealingPool();
 
-      // This invokeAny call blocks current/main thread until first task returns.
-      // Tasks that have not completed are cancelled.
-      String result =
-          service.invokeAny(ImmutableList.of(makeTask("A", 13), makeTask("B", 12), makeTask("C", 1)));
-      log.info("Winner is Task {} ", result);
+      // As soon as one task is done rest of tasks are cancelled.
+      String result = service.invokeAny(ImmutableList.of(
+          makeTask("A", 12), makeTask("B", 15), makeTask("C", 13), makeTask("D", 1), makeTask("E", 1)));
+      log.info("Winner is Task {}", result);
     } catch (InterruptedException | ExecutionException e) {
-      log.warn("task was interrupted");
+      log.warn("task is interrupted");
       throw Throwables.propagate(e);
     } finally {
       if (service != null && !service.isTerminated()) {
         service.shutdown();
       }
     }
-    log.info("END Demo003d");
+    log.info("END Demo003e");
   }
 
   private static Callable<String> makeTask(String name, int sleepSeconds) {
