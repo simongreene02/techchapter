@@ -1,8 +1,8 @@
-package com.djd.fun.poc.geo;
+package com.djd.fun.poc.geo.datatype;
 
 import org.junit.Test;
 
-import static com.djd.fun.poc.geo.HaversineDistance.Unit.KILOMETERS;
+import static com.djd.fun.poc.geo.datatype.HaversineDistance.Unit.KILOMETERS;
 import static com.google.common.truth.Truth.assertThat;
 
 /**

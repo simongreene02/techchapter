@@ -1,4 +1,6 @@
-package com.djd.fun.poc.geo;
+package com.djd.fun.poc.geo.datatype;
+
+import com.djd.fun.poc.geo.datatype.Location;
 
 import org.junit.Test;
 

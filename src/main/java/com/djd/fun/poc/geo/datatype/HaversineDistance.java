@@ -1,4 +1,4 @@
-package com.djd.fun.poc.geo;
+package com.djd.fun.poc.geo.datatype;
 
 /**
  * Immutable distance data type for given two {@link Location}s
