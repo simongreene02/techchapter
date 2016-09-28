@@ -14,21 +14,21 @@ public class HaversineDistanceTest {
   @Test
   public void getDistance_zero() {
     HaversineDistance distance = HaversineDistance.with(Location.with(40, 50), Location.with(40, 50));
-    assertThat(distance.getDistance(KILOMETERS)).isWithin(0).of(0);
+    assertThat(distance.getDistanceIn(KILOMETERS)).isWithin(0).of(0);
   }
 
   @Test
   public void getDistance_chicagoToLA() {
     HaversineDistance distance = HaversineDistance.with(
         Location.with(41.87, -87.62), Location.with(33.94, -118.40));
-    assertThat(distance.getDistance(KILOMETERS)).isWithin(0.001).of(2823.966);
+    assertThat(distance.getDistanceIn(KILOMETERS)).isWithin(0.001).of(2823.966);
   }
 
   @Test
   public void getDistance_nashvilleToLA() {
     HaversineDistance distance = HaversineDistance.with(
         Location.with(36.12, -86.67), Location.with(33.94, -118.40));
-    assertThat(distance.getDistance(KILOMETERS)).isWithin(0.001).of(2887.259);
+    assertThat(distance.getDistanceIn(KILOMETERS)).isWithin(0.001).of(2887.259);
   }
 
   @Test

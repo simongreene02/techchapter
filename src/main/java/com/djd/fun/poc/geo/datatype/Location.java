@@ -56,8 +56,8 @@ public class Location {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-        .add("longitude", longitude)
         .add("latitude", latitude)
+        .add("longitude", longitude)
         .toString();
   }
 

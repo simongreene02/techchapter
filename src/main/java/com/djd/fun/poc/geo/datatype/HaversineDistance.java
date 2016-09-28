@@ -12,7 +12,7 @@ import java.util.Objects;
  * @since 9/25/16
  */
 public class HaversineDistance {
-  private static final double EARTH_RADIUS = 6372.8; // Earth radius in kilometers
+  public static final double EARTH_RADIUS = 6372.8; // Earth radius in kilometers
 
   public enum Unit {
     KILOMETERS(1), MILES(0.621371), METERS(1000);
@@ -38,7 +38,7 @@ public class HaversineDistance {
     return new HaversineDistance(from, to);
   }
 
-  public double getDistance(Unit unit) {
+  public double getDistanceIn(Unit unit) {
     return distanceInKilometers * unit.getValue();
   }
 
