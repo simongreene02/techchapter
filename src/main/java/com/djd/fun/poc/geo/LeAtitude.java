@@ -4,6 +4,9 @@ import com.djd.fun.poc.geo.datatype.HaversineDistance;
 import com.djd.fun.poc.geo.datatype.Location;
 import com.google.common.eventbus.Subscribe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Stateful class responsible for interacting virtual GPS simulator (aka GyPSy)
  *
@@ -11,6 +14,7 @@ import com.google.common.eventbus.Subscribe;
  * @since 9/25/16
  */
 public class LeAtitude {
+  private static final Logger log = LoggerFactory.getLogger(LeAtitude.class);
   private final Location originLocation;
   private final Location destinationLocation;
   private final HaversineDistance totalDistance;
@@ -29,6 +33,7 @@ public class LeAtitude {
   @Subscribe
   public void recordCurrentLocationChange(Location currentLocation) {
     this.currentLocation = currentLocation;
+    log.info("current location updated: {}", currentLocation);
   }
 
   public Location getCurrentLocation() {

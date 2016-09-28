@@ -1,5 +1,7 @@
 package com.djd.fun.poc.geo.datatype;
 
+import java.util.Objects;
+
 /**
  * Immutable distance data type for given two {@link Location}s
  * <p>
@@ -51,11 +53,11 @@ public class HaversineDistance {
     if (from.equals(to)) {
       return 0;
     }
-    // convert degree to radians
-    final double deltaLat = Math.toRadians(to.getLatitude() - from.getLatitude());
-    final double deltaLon = Math.toRadians(to.getLongitude() - from.getLongitude());
-    final double fromLat = Math.toRadians(from.getLatitude());
-    final double toLat = Math.toRadians(to.getLatitude());
+
+    final double fromLat = from.getLatitudeInRadians();
+    final double toLat = to.getLatitudeInRadians();
+    final double deltaLat = toLat - fromLat;
+    final double deltaLon = to.getLongitudeInRadians() - from.getLongitudeInRadians();
 
     final double value = sineSquared(deltaLat / 2) +
         Math.cos(fromLat) * Math.cos(toLat) * sineSquared(deltaLon / 2);
@@ -70,5 +72,16 @@ public class HaversineDistance {
    */
   private static double sineSquared(double value) {
     return Math.pow(Math.sin(value), 2);
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    HaversineDistance that = (HaversineDistance)o;
+    return Double.compare(that.distanceInKilometers, distanceInKilometers) == 0;
+  }
+
+  @Override public int hashCode() {
+    return Objects.hash(distanceInKilometers);
   }
 }

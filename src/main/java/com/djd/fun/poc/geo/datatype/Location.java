@@ -13,8 +13,8 @@ import com.google.common.base.MoreObjects;
  */
 public class Location {
 
-  private final double latitude;
-  private final double longitude;
+  private final double latitude; // in degrees
+  private final double longitude; // in degrees
 
   private Location(double latitude, double longitude) {
     this.latitude = checkLatitude(latitude);
@@ -27,6 +27,14 @@ public class Location {
 
   public double getLongitude() {
     return longitude;
+  }
+
+  public double getLatitudeInRadians() {
+    return Math.toRadians(latitude);
+  }
+
+  public double getLongitudeInRadians() {
+    return Math.toRadians(longitude);
   }
 
   public static Location with(double latitude, double longitude) {

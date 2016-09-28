@@ -4,6 +4,8 @@ import com.djd.fun.poc.geo.datatype.Location;
 
 import org.junit.Test;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * @author JGD
  * @since 9/25/16
@@ -58,6 +60,12 @@ public class LocationTest {
   @Test(expected = IllegalArgumentException.class)
   public void checkLongitude_negative181_error() {
     Location.checkLongitude(-181);
+  }
+
+  public void getInRadians() {
+    Location location = Location.with(30, 40);
+    assertThat(location.getLatitudeInRadians()).isWithin(0).of(Math.toRadians(30));
+    assertThat(location.getLongitudeInRadians()).isWithin(0).of(Math.toRadians(40));
   }
 
 }
