@@ -46,7 +46,7 @@ public class ImageRotator {
    * @param image
    */
   public static void rotateInplace90(int[][] image) {
-    if (image == null || image.length == 0) {
+    if (image == null) {
       throw new IllegalArgumentException("image should be at least 1x1");
     }
     int n = image.length;

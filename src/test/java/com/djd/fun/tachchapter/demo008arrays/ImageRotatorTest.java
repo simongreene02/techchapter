@@ -53,16 +53,19 @@ public class ImageRotatorTest {
   }
 
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void rotateInplace90_emptyImage_error() {
-    ImageRotator.rotateInplace90(new int[0][0]);
+     int[][] payload = new int[][]{};
+    ImageRotator.rotateInplace90(payload);
+    assertThat(payload).hasLength(0);
   }
 
   @Test
   public void rotateInplace90_1x1Image() {
-    int[][] payload = new int[1][1];
-    ImageRotator.rotateInplace90(new int[1][1]);
-    assertThat(Arrays.deepEquals(payload, new int[1][1])).isTrue();
+    int[][] payload = new int[][]{{8}};
+    ImageRotator.rotateInplace90(payload);
+    assertThat(payload).hasLength(1);
+    assertThat(payload[0][0]).isEqualTo(8);
   }
 
   @Test
