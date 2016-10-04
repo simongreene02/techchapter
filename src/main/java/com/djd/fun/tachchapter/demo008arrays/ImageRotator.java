@@ -42,9 +42,26 @@ public class ImageRotator {
 
   /**
    * In place rotation
+   *
    * @param image
    */
   public static void rotateInplace90(int[][] image) {
-    throw new UnsupportedOperationException("TODO");
+    if (image == null || image.length == 0) {
+      throw new IllegalArgumentException("image should be at least 1x1");
+    }
+    int n = image.length;
+    for (int i = 0; i < n / 2; i++) {
+      for (int j = i; j < n - 1 - i; j++) {
+        int tmp = image[i][j];
+        // left to top
+        image[i][j] = image[n - 1 - j][i];
+        // bottom to left
+        image[n - 1 - j][i] = image[n - 1 - i][n - 1 - j];
+        // right to bottom
+        image[n - 1 - i][n - 1 - j] = image[j][n - 1 - i];
+        // top to right
+        image[j][n - 1 - i] = tmp;
+      }
+    }
   }
 }
