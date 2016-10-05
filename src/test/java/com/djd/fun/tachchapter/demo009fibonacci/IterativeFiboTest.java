@@ -1,7 +1,8 @@
 package com.djd.fun.tachchapter.demo009fibonacci;
 
+import java.math.BigInteger;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -13,7 +14,7 @@ import static com.google.common.truth.Truth.assertThat;
  */
 public class IterativeFiboTest {
   private Fibonacci fibonacci;
-  
+
   @Before
   public void setUp() {
     fibonacci = new IterativeFibo();
@@ -69,9 +70,25 @@ public class IterativeFiboTest {
     assertThat(fibonacci.findAt(20)).isEqualTo(6765);
   }
 
-  @Ignore("O(2^N) ... that is slow for N=46")
   @Test
   public void findAt_46_1836311903() {
     assertThat(fibonacci.findAt(46)).isEqualTo(1836311903);
+  }
+
+  @Test
+  public void findBigAt_46_1836311903() {
+    assertThat(fibonacci.findBigAt(BigInteger.valueOf(46))).isEqualTo(BigInteger.valueOf(1836311903));
+  }
+
+  @Test
+  public void findBigAt_100_354224848179261915075() {
+    assertThat(fibonacci.findBigAt(BigInteger.valueOf(100)))
+        .isEqualTo(new BigInteger("354224848179261915075"));
+  }
+
+  @Test
+  public void findBigAt_1000_veryBigNumber() {
+    assertThat(fibonacci.findBigAt(BigInteger.valueOf(1000)))
+        .isEqualTo(new BigInteger("43466557686937456435688527675040625802564660517371780402481729089536555417949051890403879840079255169295922593080322634775209689623239873322471161642996440906533187938298969649928516003704476137795166849228875"));
   }
 }

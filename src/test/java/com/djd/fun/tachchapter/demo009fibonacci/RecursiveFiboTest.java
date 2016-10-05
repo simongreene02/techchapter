@@ -1,6 +1,9 @@
 package com.djd.fun.tachchapter.demo009fibonacci;
 
+import java.math.BigInteger;
+
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -68,8 +71,20 @@ public class RecursiveFiboTest {
     assertThat(fibonacci.findAt(20)).isEqualTo(6765);
   }
 
+  @Ignore("O(2^N) ... that is slow for N=46")
   @Test
   public void findAt_46_1836311903() {
     assertThat(fibonacci.findAt(46)).isEqualTo(1836311903);
+  }
+
+  @Test
+  public void findBigAt_5_5() {
+    assertThat(fibonacci.findBigAt(BigInteger.valueOf(5))).isEqualTo(BigInteger.valueOf(5));
+  }
+
+  @Ignore("O(2^N) ... that is slow for N=46")
+  @Test
+  public void findBigAt_46_1836311903() {
+    assertThat(fibonacci.findBigAt(BigInteger.valueOf(46))).isEqualTo(BigInteger.valueOf(1836311903));
   }
 }

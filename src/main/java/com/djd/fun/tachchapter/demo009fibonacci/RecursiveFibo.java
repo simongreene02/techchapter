@@ -1,5 +1,7 @@
 package com.djd.fun.tachchapter.demo009fibonacci;
 
+import java.math.BigInteger;
+
 /**
  * @author JGD
  * @since 10/4/16
@@ -16,7 +18,7 @@ public class RecursiveFibo implements Fibonacci {
   @Override
   public int findAt(int n) {
     if (n < 0 || n > 46) {
-      throw new IllegalArgumentException("Acceptable range: 0 <= N <= 16");
+      throw new IllegalArgumentException("Acceptable range: 0 <= N <= 46");
     }
 
     // case where n=0 or n=1
@@ -24,5 +26,20 @@ public class RecursiveFibo implements Fibonacci {
       return n;
     }
     return findAt(n - 1) + findAt(n - 2);
+  }
+
+  @Override
+  public BigInteger findBigAt(BigInteger n) {
+    if (n.compareTo(BigInteger.ZERO) < 0 || BigInteger.valueOf(46).compareTo(n) < 0) {
+      throw new IllegalArgumentException("Acceptable range: 0 <= N <= 46");
+    }
+
+    // case where n=0 or n=1
+    if (n.compareTo(BigInteger.ZERO) == 0 || n.compareTo(BigInteger.ONE) == 0) {
+      return n;
+    }
+    BigInteger prev = findBigAt(n.subtract(BigInteger.ONE));
+    BigInteger prev2 = findBigAt(n.subtract(BigInteger.valueOf(2)));
+    return prev.add(prev2);
   }
 }
