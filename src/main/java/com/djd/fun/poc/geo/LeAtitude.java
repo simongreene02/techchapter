@@ -2,6 +2,7 @@ package com.djd.fun.poc.geo;
 
 import com.djd.fun.poc.geo.datatype.HaversineDistance;
 import com.djd.fun.poc.geo.datatype.Location;
+import com.djd.fun.poc.geo.datatype.Trip;
 import com.google.common.eventbus.Subscribe;
 
 import org.slf4j.Logger;
@@ -20,6 +21,10 @@ public class LeAtitude {
   private final HaversineDistance totalDistance;
   private Location currentLocation;
 
+  public LeAtitude(Trip trip) {
+    this(trip.getFrom(), trip.getTo());
+  }
+
   public LeAtitude(Location originLocation, Location destinationLocation) {
     this.originLocation = originLocation;
     this.destinationLocation = destinationLocation;
@@ -33,7 +38,7 @@ public class LeAtitude {
   @Subscribe
   public void recordCurrentLocationChange(Location currentLocation) {
     this.currentLocation = currentLocation;
-    log.info("current location updated: {}", currentLocation);
+    log.debug("current location updated: {}", currentLocation);
   }
 
   public Location getCurrentLocation() {

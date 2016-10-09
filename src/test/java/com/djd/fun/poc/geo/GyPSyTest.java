@@ -1,6 +1,7 @@
 package com.djd.fun.poc.geo;
 
 import com.djd.fun.poc.geo.datatype.Location;
+import com.djd.fun.poc.geo.datatype.Trip;
 
 import org.junit.Test;
 

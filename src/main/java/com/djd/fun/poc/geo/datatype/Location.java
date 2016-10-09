@@ -55,10 +55,7 @@ public class Location {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("latitude", latitude)
-        .add("longitude", longitude)
-        .toString();
+    return latitude + "," + longitude;
   }
 
   @VisibleForTesting static double checkLatitude(double latitude) {
