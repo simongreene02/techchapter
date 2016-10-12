@@ -14,7 +14,7 @@ public class Trip {
   /**
    * number of incremental points between from & to locations
    */
-  private static final int DEFAULT_DROP_POINTS = 10;
+  private static final int DEFAULT_DROP_POINTS = 18;
   private final Location from;
   private final Location to;
   private final HaversineDistance distance;
