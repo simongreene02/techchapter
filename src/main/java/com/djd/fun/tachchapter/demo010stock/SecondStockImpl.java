@@ -1,6 +1,9 @@
 package com.djd.fun.tachchapter.demo010stock;
 
 /**
+ * Second attempt to solve this in O(n).
+ * Bug: down hill prices always results in 0 profit instead of negative value.
+ *
  * @author JGD
  * @since 10/23/16
  */

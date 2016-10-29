@@ -15,7 +15,8 @@ package com.djd.fun.tachchapter.demo010stock;
  * getMaxProfit(stockPricesYesterday);
  * </code></pre>
  * // returns 6 (buying for $5 and selling for $11)
- * source: https://www.interviewcake.com/
+ *
+ * Reference: https://www.interviewcake.com/question/java/stock-price
  *
  * @author JGD
  * @since 10/23/16

@@ -1,6 +1,8 @@
 package com.djd.fun.tachchapter.demo010stock;
 
 /**
+ * Third attempt to solve negative-profit bug. I needed to compute maxProfit before change minPrice.
+ *
  * @author JGD
  * @since 10/23/16
  */
