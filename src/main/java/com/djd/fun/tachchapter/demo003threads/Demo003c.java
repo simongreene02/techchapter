@@ -1,4 +1,4 @@
-package com.djd.fun.tachchapter.demo003;
+package com.djd.fun.tachchapter.demo003threads;
 
 
 import java.util.Collection;
@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.djd.fun.tachchapter.demo003.Threads.findCurrentThreadName;
+import static com.djd.fun.tachchapter.demo003threads.Threads.findCurrentThreadName;
 
 /**
  * This class is to demo how to use jdk8 concurrency API

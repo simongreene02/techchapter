@@ -1,4 +1,4 @@
-package com.djd.fun.tachchapter.demo003;
+package com.djd.fun.tachchapter.demo003threads;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;

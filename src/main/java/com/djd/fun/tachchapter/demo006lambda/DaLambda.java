@@ -1,4 +1,4 @@
-package com.djd.fun.tachchapter.demo006;
+package com.djd.fun.tachchapter.demo006lambda;
 
 import java.util.List;
 

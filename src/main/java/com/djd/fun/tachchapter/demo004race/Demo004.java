@@ -1,4 +1,4 @@
-package com.djd.fun.tachchapter.demo004;
+package com.djd.fun.tachchapter.demo004race;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -7,14 +7,14 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.djd.fun.tachchapter.demo003.Threads.stop;
+import static com.djd.fun.tachchapter.demo003threads.Threads.stop;
 
 /**
  * Race-condition with non-atomic int.
  * <p>
  * Run this program, you will see non-deterministic count.
  * <pre>
- * [main] INFO com.djd.fun.tachchapter.demo004.Demo004 - count=3706
+ * [main] INFO com.djd.fun.tachchapter.demo004race.Demo004 - count=3706
  * </pre>
  *
  * @author JGD

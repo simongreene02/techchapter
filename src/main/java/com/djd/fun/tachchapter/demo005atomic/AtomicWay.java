@@ -1,4 +1,4 @@
-package com.djd.fun.tachchapter.demo005;
+package com.djd.fun.tachchapter.demo005atomic;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.djd.fun.tachchapter.demo003.Threads.stop;
+import static com.djd.fun.tachchapter.demo003threads.Threads.stop;
 
 /**
  * Thread safe without lock, monitor, and synchronized

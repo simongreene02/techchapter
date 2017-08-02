@@ -1,4 +1,4 @@
-package com.djd.fun.tachchapter.demo003;
+package com.djd.fun.tachchapter.demo003threads;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
