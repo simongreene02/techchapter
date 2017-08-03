@@ -1,9 +1,8 @@
 package com.djd.fun.tachchapter.demo014swing;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
-import com.djd.fun.tachchapter.demo014swing.canvas.GradientCanvas;
-import com.djd.fun.tachchapter.demo014swing.canvas.MatchOnCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.SmileCanvas;
 
 /**
@@ -11,9 +10,12 @@ import com.djd.fun.tachchapter.demo014swing.canvas.SmileCanvas;
  */
 public class BasicSwingSandbox {
   public static void main(String[] params) {
-    JFrame jFrame = new JFrame(); // Foundation of all graphical components on screen
-    jFrame.add(new SmileCanvas()); // Add Canvas instance to draw graphical shapes
-    jFrame.setSize(700,500); // Width: 700px and Height: 500px
-    jFrame.setVisible(true);
+    // Use SwingUtilities to run the swing on background thread.
+    SwingUtilities.invokeLater(() -> {
+      JFrame jFrame = new JFrame(); // Foundation of all graphical components on screen
+      jFrame.add(new SmileCanvas()); // Add Canvas instance to draw graphical shapes
+      jFrame.setSize(700, 500); // Width: 700px and Height: 500px
+      jFrame.setVisible(true);
+    });
   }
 }

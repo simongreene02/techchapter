@@ -15,16 +15,16 @@ public class SmileCanvas extends Canvas {
     Graphics2D g2 = (Graphics2D)g;
     g2.setColor(Color.YELLOW);
     g2.fillOval(100, 100, 100, 100); // (int x, int y, int width, int height)
-    int x = 110;
-    int y = 180;
-    int width = 100;
-    int height = 100;
+    int x = 115;
+    int y = 115;
+    int width = 70;
+    int height = 70;
     /*
      * A startAngle of 0º points horizontally to the right (like the unit circle in math).
      * Positive is a counterclockwise rotation starting at 0º.
      */
-    int startAngle = 0;
-    int arcAngle = 90;
+    int startAngle = -10;
+    int arcAngle = -160;
     g2.setColor(Color.BLACK);
     g2.drawArc(x, y, width, height, startAngle, arcAngle);
   }
