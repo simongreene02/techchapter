@@ -26,9 +26,10 @@ public class GuiPreper {
   public static void createAndShowGUI() {
     JFrame jFrame = new JFrame("Demo 014"); // Foundation of all graphical components on screen
     jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    jFrame.setJMenuBar(new MyMenuBar()); // add Menu
-    jFrame.setContentPane(new MyPanel());
-    jFrame.pack();
+    MyPanel myPanel = new MyPanel();
+    jFrame.setJMenuBar(new MyMenuBar(myPanel)); // add Menu
+    jFrame.add(myPanel); // Add myPanel to content pane in the JRootPane in JFrame
+    jFrame.setSize(700, 500);
     jFrame.setVisible(true);
   }
 }

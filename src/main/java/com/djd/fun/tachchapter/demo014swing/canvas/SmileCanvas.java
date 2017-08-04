@@ -24,10 +24,11 @@ public class SmileCanvas extends Canvas {
      * A startAngle of 0º points horizontally to the right (like the unit circle in math).
      * Positive is a counterclockwise rotation starting at 0º.
      */
-    int startAngle = -10;
-    int arcAngle = -160;
+    int startAngle = -20;
+    int arcAngle = -140;
     g2.setColor(Color.BLACK);
     g2.drawArc(x, y, width, height, startAngle, arcAngle);
+    g2.fillOval(125, 130, 10, 15);
+    g2.fillOval(165, 130, 10, 15);
   }
-
 }

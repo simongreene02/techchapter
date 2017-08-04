@@ -9,6 +9,8 @@ import java.awt.Graphics;
  */
 public class BullseyeCanvas extends Canvas {
 
+  private static final Color[] RED_BLACK = {Color.BLACK, Color.RED};
+
   @Override
   public void paint(Graphics g) {
     super.paint(g);
@@ -16,13 +18,12 @@ public class BullseyeCanvas extends Canvas {
     int y = 100;
     int width = 300;
     int height = 300;
-    int delta = 10;
-    g.drawOval(x, y, width, height);
-    g.fillOval(x + delta, y + delta, width - delta * 2, height - delta * 2);
-    g.setColor(Color.RED);
-    delta += 10;
-    g.fillOval(x + delta, y + delta, width - delta * 2, height - delta * 2);
+    int delta = 1;
 
-    // TODO try above with loop
+    for (int i = 0; i < 7; i++) {
+      g.setColor(RED_BLACK[i % 2]);
+      g.fillOval(x + delta, y + delta, width - delta * 2, height - delta * 2);
+      delta += 15;
+    }
   }
 }
