@@ -12,6 +12,7 @@ public class MatchOnCanvas extends Canvas {
 
   @Override
   public void paint(Graphics g) {
+    super.paint(g);
     Graphics2D g2 = (Graphics2D)g;
     g2.drawRect(70, 80, 70, 140); // (int x, int y, int width, int height)
     g2.setColor(Color.RED);

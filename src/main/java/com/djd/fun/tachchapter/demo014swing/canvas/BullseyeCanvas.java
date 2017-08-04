@@ -11,6 +11,7 @@ public class BullseyeCanvas extends Canvas {
 
   @Override
   public void paint(Graphics g) {
+    super.paint(g);
     int x = 100;
     int y = 100;
     int width = 300;

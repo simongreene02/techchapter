@@ -14,6 +14,7 @@ public class GradientCanvas extends Canvas {
 
   @Override
   public void paint(Graphics g) {
+    super.paint(g);
     Graphics2D g2 = (Graphics2D)g;
     Point topLeft = new Point(100, 100);
     Point bottomRight = new Point(300, 300);

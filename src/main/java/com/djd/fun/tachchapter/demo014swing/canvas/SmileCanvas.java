@@ -12,6 +12,7 @@ public class SmileCanvas extends Canvas {
 
   @Override
   public void paint(Graphics g) {
+    super.paint(g);
     Graphics2D g2 = (Graphics2D)g;
     g2.setColor(Color.YELLOW);
     g2.fillOval(100, 100, 100, 100); // (int x, int y, int width, int height)
