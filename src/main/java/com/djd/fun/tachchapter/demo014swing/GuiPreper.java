@@ -29,7 +29,7 @@ public class GuiPreper {
     MyPanel myPanel = new MyPanel();
     jFrame.setJMenuBar(new MyMenuBar(myPanel)); // add Menu
     jFrame.add(myPanel); // Add myPanel to content pane in the JRootPane in JFrame
-    jFrame.setSize(700, 500);
+    jFrame.pack(); // This will use myPanel.getPreferredSize() to decide the size of JFrame
     jFrame.setVisible(true);
   }
 }

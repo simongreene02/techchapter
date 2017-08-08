@@ -41,6 +41,10 @@ public class MyPanel extends JPanel implements ActionListener {
     this.componentNames = ImmutableSortedSet.copyOf(components.keySet());
   }
 
+  @Override
+  public Dimension getPreferredSize() {
+    return new Dimension(700, 500);
+  }
   /**
    * Add component to this JPanel
    *
