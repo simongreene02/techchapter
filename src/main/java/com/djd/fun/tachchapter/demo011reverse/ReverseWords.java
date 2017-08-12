@@ -2,6 +2,9 @@ package com.djd.fun.tachchapter.demo011reverse;
 
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Create a function which taks an array of chars which contains multiple words.
  * Reverse words in place.
@@ -11,12 +14,12 @@ import javax.annotation.Nullable;
  */
 public class ReverseWords {
 
+  private static final Logger log = LoggerFactory.getLogger(ReverseWords.class);
+
   public static void reverseWords(@Nullable char[] words) {
-    if (words == null || words.length < 2 || hasOnlyOneWord(words)) {
+    if (words == null || words.length < 2 || countWords(words) < 2) {
       return;
     }
-    assert(words.length > 1);
-
     // first reverse entire string
     reverseCharsInRange(words, 0, words.length - 1);
 
@@ -54,13 +57,23 @@ public class ReverseWords {
     data[index1] ^= data[index2];
   }
 
-  private static boolean hasOnlyOneWord(char[] words) {
-    // check if there are more than one word
+  /**
+   * Count number of words
+   * @param words
+   * @return word count
+   */
+  private static int countWords(char[] words) {
+    int wordCount = 0;
+    boolean spaceWordToggle = true; // true: space, false: word
     for (int i = 0; i < words.length; i++) {
-      if (words[i] == ' ') {
-        return false;
+      if (spaceWordToggle && words[i] != ' ') {
+        wordCount++;
+        spaceWordToggle = false;
+      } else if (!spaceWordToggle && words[i] == ' ') {
+        spaceWordToggle = true;
       }
     }
-    return true;
+    log.info("wordCount: {}", wordCount);
+    return wordCount;
   }
 }

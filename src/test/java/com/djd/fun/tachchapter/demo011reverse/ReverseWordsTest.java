@@ -20,6 +20,19 @@ public class ReverseWordsTest {
     assertThat(input).isEqualTo("happy very am I".toCharArray());
   }
 
+  @Test
+  public void reverseWords_whiteSpaceSuffix() {
+    char [] input = "happy ".toCharArray(); // mutable array
+    ReverseWords.reverseWords(input);
+    assertThat(input).isEqualTo("happy ".toCharArray());
+  }
+
+  @Test
+  public void reverseWords_whiteSpacePrefix() {
+    char [] input = " happy".toCharArray(); // mutable array
+    ReverseWords.reverseWords(input);
+    assertThat(input).isEqualTo(" happy".toCharArray());
+  }
 
   @Test
   public void reverseWords_singleWord() {
