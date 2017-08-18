@@ -13,6 +13,7 @@ import com.djd.fun.tachchapter.demo014swing.canvas.BullseyeCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.Gradient2JPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.GradientCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.MatchOnCanvas;
+import com.djd.fun.tachchapter.demo014swing.canvas.MouseListenerCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.SmileCanvas;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -32,12 +33,14 @@ public class MyPanel extends JPanel implements ActionListener {
 
   public MyPanel() {
     super(new BorderLayout());
-    this.components = ImmutableMap.of(
-        "GradientCanvas", new GradientCanvas(),
-        "Gradient2JPanel", new Gradient2JPanel(),
-        "BullseyeCanvas", new BullseyeCanvas(),
-        "MatchOnCanvas", new MatchOnCanvas(),
-        "SmileCanvas", new SmileCanvas());
+    this.components = ImmutableMap.<String, Component>builder()
+        .put("MouseListenerCanvas", new MouseListenerCanvas())
+        .put("GradientCanvas", new GradientCanvas())
+        .put("Gradient2JPanel", new Gradient2JPanel())
+        .put("BullseyeCanvas", new BullseyeCanvas())
+        .put("MatchOnCanvas", new MatchOnCanvas())
+        .put("SmileCanvas", new SmileCanvas())
+        .build();
     this.componentNames = ImmutableSortedSet.copyOf(components.keySet());
   }
 
@@ -45,6 +48,7 @@ public class MyPanel extends JPanel implements ActionListener {
   public Dimension getPreferredSize() {
     return new Dimension(700, 500);
   }
+
   /**
    * Add component to this JPanel
    *
