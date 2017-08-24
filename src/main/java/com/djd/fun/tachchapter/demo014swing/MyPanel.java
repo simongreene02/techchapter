@@ -1,7 +1,6 @@
 package com.djd.fun.tachchapter.demo014swing;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +9,7 @@ import java.util.Collection;
 import javax.swing.JPanel;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.BullseyeCanvas;
+import com.djd.fun.tachchapter.demo014swing.canvas.CirculatorPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.CommandResponder;
 import com.djd.fun.tachchapter.demo014swing.canvas.Gradient2JPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.GradientCanvas;
@@ -35,6 +35,7 @@ public class MyPanel extends JPanel implements ActionListener {
   public MyPanel() {
     super(new BorderLayout());
     this.components = ImmutableMap.<String, CommandResponder>builder()
+        .put(CirculatorPanel.class.getSimpleName(), new CirculatorPanel())
         .put(MouseListenerCanvas.class.getSimpleName(), new MouseListenerCanvas())
         .put(GradientCanvas.class.getSimpleName(), new GradientCanvas())
         .put(Gradient2JPanel.class.getSimpleName(), new Gradient2JPanel())
