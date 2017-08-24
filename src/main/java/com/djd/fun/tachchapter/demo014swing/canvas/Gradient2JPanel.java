@@ -1,17 +1,21 @@
 package com.djd.fun.tachchapter.demo014swing.canvas;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Gradient2JPanel extends JPanel {
+public class Gradient2JPanel extends JPanel implements CommandResponder {
 
   private static final Logger log = LoggerFactory.getLogger(Gradient2JPanel.class);
 
@@ -60,5 +64,15 @@ public class Gradient2JPanel extends JPanel {
       return 0;
     }
     return Math.min(value, 255);
+  }
+
+  @Override
+  public Component getComponent() {
+    return this;
+  }
+
+  @Override
+  public Document getDocument() {
+    return new PlainDocument();
   }
 }

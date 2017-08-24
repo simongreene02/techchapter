@@ -2,13 +2,18 @@ package com.djd.fun.tachchapter.demo014swing.canvas;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.security.cert.CRLSelector;
 
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class demonstrates use of MouseListener.
  */
-public class MouseListenerCanvas extends Canvas {
+public class MouseListenerCanvas extends Canvas implements CommandResponder {
   private static final Logger log = LoggerFactory.getLogger(MouseListenerCanvas.class);
   private static final Color[] COLORS = {Color.RED, Color.GREEN, Color.BLUE};
   private int firstColorIndex = 0;
@@ -48,6 +53,16 @@ public class MouseListenerCanvas extends Canvas {
    */
   private static int adjustColorIndex(int rawIndex) {
     return rawIndex < COLORS.length ? rawIndex : rawIndex - COLORS.length;
+  }
+
+  @Override
+  public Component getComponent() {
+    return this;
+  }
+
+  @Override
+  public Document getDocument() {
+    return new PlainDocument();
   }
 
   /**

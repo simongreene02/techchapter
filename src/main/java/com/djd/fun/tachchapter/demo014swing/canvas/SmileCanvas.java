@@ -2,13 +2,18 @@ package com.djd.fun.tachchapter.demo014swing.canvas;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionListener;
+
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 /**
  * Created by acorn on 8/2/17.
  */
-public class SmileCanvas extends Canvas {
+public class SmileCanvas extends Canvas implements CommandResponder {
 
   @Override
   public void paint(Graphics g) {
@@ -30,5 +35,14 @@ public class SmileCanvas extends Canvas {
     g2.drawArc(x, y, width, height, startAngle, arcAngle);
     g2.fillOval(125, 130, 10, 15);
     g2.fillOval(165, 130, 10, 15);
+  }
+
+  @Override
+  public Component getComponent() {
+    return this;
+  }
+
+  @Override public Document getDocument() {
+    return new PlainDocument();
   }
 }

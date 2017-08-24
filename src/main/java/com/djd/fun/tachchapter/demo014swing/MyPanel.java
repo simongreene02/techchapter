@@ -10,12 +10,12 @@ import java.util.Collection;
 import javax.swing.JPanel;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.BullseyeCanvas;
+import com.djd.fun.tachchapter.demo014swing.canvas.CommandResponder;
 import com.djd.fun.tachchapter.demo014swing.canvas.Gradient2JPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.GradientCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.MatchOnCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.MouseListenerCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.SmileCanvas;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
@@ -24,24 +24,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.NORTH;
 
 public class MyPanel extends JPanel implements ActionListener {
 
   private static final Logger log = LoggerFactory.getLogger(MyPanel.class);
-  private final ImmutableMap<String, Component> components;
+  private final ImmutableMap<String, CommandResponder> components;
   private final ImmutableSet<String> componentNames;
 
   public MyPanel() {
     super(new BorderLayout());
-    this.components = ImmutableMap.<String, Component>builder()
-        .put("MouseListenerCanvas", new MouseListenerCanvas())
-        .put("GradientCanvas", new GradientCanvas())
-        .put("Gradient2JPanel", new Gradient2JPanel())
-        .put("BullseyeCanvas", new BullseyeCanvas())
-        .put("MatchOnCanvas", new MatchOnCanvas())
-        .put("SmileCanvas", new SmileCanvas())
+    this.components = ImmutableMap.<String, CommandResponder>builder()
+        .put(MouseListenerCanvas.class.getSimpleName(), new MouseListenerCanvas())
+        .put(GradientCanvas.class.getSimpleName(), new GradientCanvas())
+        .put(Gradient2JPanel.class.getSimpleName(), new Gradient2JPanel())
+        .put(BullseyeCanvas.class.getSimpleName(), new BullseyeCanvas())
+        .put(MatchOnCanvas.class.getSimpleName(), new MatchOnCanvas())
+        .put(SmileCanvas.class.getSimpleName(), new SmileCanvas())
         .build();
     this.componentNames = ImmutableSortedSet.copyOf(components.keySet());
+
   }
 
   @Override
@@ -58,7 +60,9 @@ public class MyPanel extends JPanel implements ActionListener {
   public void actionPerformed(ActionEvent event) {
     log.info("action command: " + event.getActionCommand());
     removeAll(); // remove previous component from this panel
-    add(components.get(event.getActionCommand()), CENTER); // add selected component to this panel
+    CommandResponder commandResponder = components.get(event.getActionCommand());
+    add(commandResponder.getComponent(), CENTER); // add selected component to this panel
+    add(new CommandPanel(commandResponder.getDocument()), NORTH);
     revalidate(); // refresh the view
   }
 

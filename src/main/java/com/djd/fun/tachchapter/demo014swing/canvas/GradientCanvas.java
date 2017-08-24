@@ -2,6 +2,7 @@ package com.djd.fun.tachchapter.demo014swing.canvas;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +20,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by acorn on 8/2/17.
  */
-public class GradientCanvas extends Canvas implements ActionListener {
+public class GradientCanvas extends Canvas implements ActionListener, CommandResponder {
   private static final Logger log = LoggerFactory.getLogger(GradientCanvas.class);
   private static final Color [] COLORS = {Color.RED, Color.BLUE, Color.BLACK, Color.YELLOW, Color.GREEN};
   private final Timer timer;
@@ -48,5 +51,15 @@ public class GradientCanvas extends Canvas implements ActionListener {
     secondColorIndex = (int)(event.getWhen() % COLORS.length);
     repaint();
     revalidate();
+  }
+
+  @Override
+  public Component getComponent() {
+    return this;
+  }
+
+  @Override
+  public Document getDocument() {
+    return new PlainDocument();
   }
 }
