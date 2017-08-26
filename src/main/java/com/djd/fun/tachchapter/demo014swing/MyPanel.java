@@ -13,6 +13,7 @@ import com.djd.fun.tachchapter.demo014swing.canvas.CirculatorPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.CommandResponder;
 import com.djd.fun.tachchapter.demo014swing.canvas.Gradient2JPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.GradientCanvas;
+import com.djd.fun.tachchapter.demo014swing.canvas.IconPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.MatchOnCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.MouseListenerCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.SmileCanvas;
@@ -35,6 +36,7 @@ public class MyPanel extends JPanel implements ActionListener {
   public MyPanel() {
     super(new BorderLayout());
     this.components = ImmutableMap.<String, CommandResponder>builder()
+        .put(IconPanel.class.getSimpleName(), new IconPanel())
         .put(CirculatorPanel.class.getSimpleName(), new CirculatorPanel())
         .put(MouseListenerCanvas.class.getSimpleName(), new MouseListenerCanvas())
         .put(GradientCanvas.class.getSimpleName(), new GradientCanvas())
