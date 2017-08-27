@@ -18,6 +18,7 @@ import com.djd.fun.tachchapter.demo014swing.canvas.IconPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.MatchOnCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.MouseListenerCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.SmileCanvas;
+import com.djd.fun.tachchapter.demo014swing.maze.SmallGame;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
@@ -37,6 +38,7 @@ public class MyPanel extends JPanel implements ActionListener {
   public MyPanel() {
     super(new BorderLayout());
     this.components = ImmutableMap.<String, CommandResponder>builder()
+        .put(SmallGame.class.getSimpleName(), new SmallGame())
         .put(IconPanel.class.getSimpleName(), new IconPanel())
         .put(Animation.class.getSimpleName(), new Animation())
         .put(CirculatorPanel.class.getSimpleName(), new CirculatorPanel())

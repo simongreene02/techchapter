@@ -37,7 +37,7 @@ public class Animation extends JPanel implements CommandResponder {
   private final Timer timer;
   private boolean done = false;
 
-  private ShapeType currentShape = ShapeType.CIRCLE;
+  private ShapeType currentShape = ShapeType.SQUARE;
 
   public Animation() {
     this(new Random());
@@ -46,12 +46,11 @@ public class Animation extends JPanel implements CommandResponder {
   public Animation(Random random) {
     this.random = random;
     this.timer = new Timer(DELAY_MILLISECONDS, new MyActionListener());
-    this.timer.start();
     addMouseListener(new MouseEventListener());
   }
 
   @Override
-  public void paintComponent(Graphics g) {
+  protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     g.setColor(Color.GRAY);
     g.fillRect(0, 0, 300, 100);
@@ -77,6 +76,8 @@ public class Animation extends JPanel implements CommandResponder {
       g.drawRect(0, 120, 185, 50);
       g.setFont(new Font(null, PLAIN, 48));
       g.drawString("Winner!", 10, 160);
+    } else if (!timer.isRunning()) {
+      timer.start();
     }
   }
 
