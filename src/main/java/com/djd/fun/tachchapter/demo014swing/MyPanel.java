@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import com.djd.fun.tachchapter.demo014swing.canvas.Animation;
 import com.djd.fun.tachchapter.demo014swing.canvas.BullseyeCanvas;
 import com.djd.fun.tachchapter.demo014swing.canvas.CirculatorPanel;
 import com.djd.fun.tachchapter.demo014swing.canvas.CommandResponder;
@@ -37,6 +38,7 @@ public class MyPanel extends JPanel implements ActionListener {
     super(new BorderLayout());
     this.components = ImmutableMap.<String, CommandResponder>builder()
         .put(IconPanel.class.getSimpleName(), new IconPanel())
+        .put(Animation.class.getSimpleName(), new Animation())
         .put(CirculatorPanel.class.getSimpleName(), new CirculatorPanel())
         .put(MouseListenerCanvas.class.getSimpleName(), new MouseListenerCanvas())
         .put(GradientCanvas.class.getSimpleName(), new GradientCanvas())
