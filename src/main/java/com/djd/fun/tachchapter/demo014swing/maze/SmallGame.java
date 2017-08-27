@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.Timer;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.Abstract2DPanel;
+import com.djd.fun.tachchapter.demo014swing.maze.shapes.StarPolygon;
 import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
@@ -59,8 +60,8 @@ public class SmallGame extends Abstract2DPanel {
   @Override
   protected void paintComponent(Graphics2D g) {
     paintTiles(g);
-    paintEnemies(g);
     paintPlayer(g);
+    paintEnemies(g);
     if (enemyLocations.contains(currentPlayerLocation)) {
       if (invincible.get()) {
         log.info("player invincible");
@@ -72,7 +73,7 @@ public class SmallGame extends Abstract2DPanel {
         emenyTimer.stop();
         removeKeyListener(keyListener);
         g.setFont(new Font(null, Font.PLAIN, 69));
-        g.setColor(Color.RED);
+        g.setColor(Color.ORANGE);
         g.drawString("Mission Failed", 50, 200);
       }
     }
@@ -95,12 +96,11 @@ public class SmallGame extends Abstract2DPanel {
         fillRect(g, row, col, Color.PINK);
         switch (floor.getTileType(row, col)) {
           case W:
-            fillRect(g, row, col, Color.GRAY);
+            fillRect(g, row, col, Color.BLACK);
             break;
           case G:
             if (remainingGemLocations.contains(Location.of(row, col))) {
               fillDiamond(g, row, col, Color.MAGENTA);
-
             }
             break;
           case T:
@@ -119,7 +119,7 @@ public class SmallGame extends Abstract2DPanel {
   }
 
   private void paintEnemies(Graphics2D g) {
-    enemyLocations.forEach(location -> fillOval(g, location.row, location.col, Color.RED));
+    enemyLocations.forEach(location -> fillPolygon(g, location.row, location.col, Color.RED));
   }
 
   private static void fillRect(Graphics2D g, int row, int col, Color color) {
@@ -130,6 +130,12 @@ public class SmallGame extends Abstract2DPanel {
   private static void fillOval(Graphics2D g, int row, int col, Color color) {
     g.setColor(color);
     g.fillOval(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+  }
+
+  private static void fillPolygon(Graphics2D g, int row, int col, Color color) {
+    int delta = TILE_SIZE / 2;
+    g.setColor(color);
+    g.fillPolygon(new StarPolygon(col * TILE_SIZE + delta, row * TILE_SIZE + delta, delta, delta / 2));
   }
 
   private static void fillDiamond(Graphics2D g, int row, int col, Color color) {
