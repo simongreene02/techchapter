@@ -13,6 +13,8 @@ public class Tile {
   public enum TileType {
     W('W', "wall", false),
     H(' ', "Hollow", true),
+    U('U', "Up", true),
+    D('D', "Down", true),
     T('T', "Token", true),
     G('G', "Gen", true),
     E('E', "Enemy", true),

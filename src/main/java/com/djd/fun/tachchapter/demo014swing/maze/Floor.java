@@ -98,10 +98,10 @@ public class Floor {
     return numOfCols;
   }
 
-  /**
-   * This is initialization method.
-   * @return
-   */
+  public Tile.TileType getTileType(Location location) {
+    return getTileType(location.row, location.col);
+  }
+
   public Tile.TileType getTileType(int row, int col) {
     MorePreconditions.checkWholeNumber(row);
     MorePreconditions.checkWholeNumber(col);

@@ -16,6 +16,7 @@ import javax.swing.Timer;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.Abstract2DPanel;
 import com.djd.fun.tachchapter.demo014swing.maze.shapes.StarPolygon;
+import com.djd.fun.tachchapter.demo014swing.maze.states.FloorStates;
 import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
@@ -32,20 +33,14 @@ public class SmallGame extends Abstract2DPanel {
   private final Random random;
   private final Timer invincibleTimer;
   private final Timer emenyTimer;
-  private final Floor floor;
   private final AtomicBoolean invincible;
-  private final Set<Location> remainingGemLocations;
-  private final Set<Location> remainingTokenLocations;
-  private final Set<Location> enemyLocations;
+  private final FloorStates floorStates;
   private Location currentPlayerLocation;
 
   public SmallGame() {
-    this.floor = new FloorFactory().loadFloor("001");
+    this.floorStates = new FloorStates();
     this.invincible = new AtomicBoolean();
-    this.currentPlayerLocation = floor.getOriginalPlayerLocation();
-    this.remainingGemLocations = Sets.newHashSet(floor.getGemLocations());
-    this.remainingTokenLocations = Sets.newHashSet(floor.getTokenLocations());
-    this.enemyLocations = Sets.newConcurrentHashSet(floor.getEnemyLocations());
+    this.currentPlayerLocation = floorStates.getOriginalPlayerLocation();
     this.keyListener = new MyKeyListener();
     this.animateEnemy = new AnimateEnemy();
     this.invincibleListener = new InvincibleMode();
@@ -62,11 +57,11 @@ public class SmallGame extends Abstract2DPanel {
     paintTiles(g);
     paintPlayer(g);
     paintEnemies(g);
-    if (enemyLocations.contains(currentPlayerLocation)) {
+    if (floorStates.isEnemyAt(currentPlayerLocation)) {
       if (invincible.get()) {
         log.info("player invincible");
         // vanish enemy
-        enemyLocations.remove(currentPlayerLocation);
+        floorStates.removeEnemyAt(currentPlayerLocation);
       } else {
         log.info("player not invincible");
         // game over
@@ -77,7 +72,7 @@ public class SmallGame extends Abstract2DPanel {
         g.drawString("Mission Failed", 50, 200);
       }
     }
-    if (remainingTokenLocations.isEmpty()) {
+    if (floorStates.noMoreTokens()) {
       emenyTimer.stop();
       g.setFont(new Font(null, Font.PLAIN, 69));
       g.setColor(Color.GREEN);
@@ -88,23 +83,27 @@ public class SmallGame extends Abstract2DPanel {
 
   /**
    * place static tiles such as walls, gem and tokens
+   *
    * @param g
    */
   private void paintTiles(Graphics2D g) {
-    for (int row = 0; row < floor.getNumOfRows(); row++) {
-      for (int col = 0; col < floor.getNumOfCols(); col++) {
+    final int maxRows = floorStates.getNumOfRows();
+    final int maxCols = floorStates.getNumOfCols();
+
+    for (int row = 0; row < maxRows; row++) {
+      for (int col = 0; col < maxCols; col++) {
         fillRect(g, row, col, Color.PINK);
-        switch (floor.getTileType(row, col)) {
+        switch (floorStates.getTileType(row, col)) {
           case W:
             fillRect(g, row, col, Color.BLACK);
             break;
           case G:
-            if (remainingGemLocations.contains(Location.of(row, col))) {
+            if (floorStates.hasGemAt(Location.of(row, col))) {
               fillDiamond(g, row, col, Color.MAGENTA);
             }
             break;
           case T:
-            if (remainingTokenLocations.contains(Location.of(row, col))) {
+            if (floorStates.hasTokenAt(Location.of(row, col))) {
               fillOval(g, row, col, Color.YELLOW);
             }
             break;
@@ -119,7 +118,7 @@ public class SmallGame extends Abstract2DPanel {
   }
 
   private void paintEnemies(Graphics2D g) {
-    enemyLocations.forEach(location -> fillPolygon(g, location.row, location.col, Color.RED));
+    floorStates.getEnemyLocations().forEach(location -> fillPolygon(g, location.row, location.col, Color.RED));
   }
 
   private static void fillRect(Graphics2D g, int row, int col, Color color) {
@@ -165,13 +164,13 @@ public class SmallGame extends Abstract2DPanel {
   private Location getTargetLocation(int directionCode, Location location) {
     switch (directionCode) {
       case KeyEvent.VK_UP:
-        return floor.getNorthLocation(location);
+        return floorStates.getNorthLocation(location);
       case KeyEvent.VK_DOWN:
-        return floor.getSouthLocation(location);
+        return floorStates.getSouthLocation(location);
       case KeyEvent.VK_LEFT:
-        return floor.getWestLocation(location);
+        return floorStates.getWestLocation(location);
       case KeyEvent.VK_RIGHT:
-        return floor.getEastLocation(location);
+        return floorStates.getEastLocation(location);
       default:
         return location;
     }
@@ -181,19 +180,27 @@ public class SmallGame extends Abstract2DPanel {
 
     @Override
     public void keyPressed(KeyEvent event) {
-      log.info("keytyped:{}", event);
       Location destination = getTargetLocation(event.getKeyCode(), currentPlayerLocation);
-      if (!destination.equals(currentPlayerLocation)) {
-        currentPlayerLocation = destination;
-        // TODO repaint only delta
-        remainingTokenLocations.remove(currentPlayerLocation);
-        if (remainingGemLocations.remove(currentPlayerLocation)) {
-          // gives the player invincible power
-          invincible.set(true);
-          invincibleTimer.restart();
-        }
-        repaint();
+      if (destination.equals(currentPlayerLocation)) {
+        return;
       }
+      currentPlayerLocation = destination;
+      switch (floorStates.getTileType(currentPlayerLocation)) {
+        case D:
+          floorStates.goDown();
+          break;
+        case U:
+          floorStates.goUp();
+          break;
+      }
+      floorStates.removeTokenAt(currentPlayerLocation);
+      if (floorStates.removeGemAt(currentPlayerLocation)) {
+        // gives the player invincible power
+        invincible.set(true);
+        invincibleTimer.restart();
+      }
+      repaint();
+
     }
   }
 
@@ -213,19 +220,19 @@ public class SmallGame extends Abstract2DPanel {
       log.info("Enemy turn");
       Set<Location> destinations = Sets.newHashSet();
       // Move locations of enemies
-      for (Location location : enemyLocations) {
+      for (Location location : floorStates.getEnemyLocations()) {
         Location destination = getTargetLocation(
             DIRECTIONS[random.nextInt(DIRECTIONS.length)], location);
-        if (destinations.contains(destination) || enemyLocations.contains(destination)) {
+        if (destinations.contains(destination) || floorStates.isEnemyAt(destination)) {
           // Enemy cannot move to a location another enemy is already on.
           destinations.add(location);
         } else {
           destinations.add(destination);
         }
       }
-      enemyLocations.clear();
-      enemyLocations.addAll(destinations);
+      floorStates.refreshEnemyLocations(destinations);
       repaint();
     }
   }
+
 }
