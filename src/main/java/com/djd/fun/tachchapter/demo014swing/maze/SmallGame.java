@@ -3,9 +3,15 @@ package com.djd.fun.tachchapter.demo014swing.maze;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
+import java.awt.event.KeyListener;
+import java.util.Random;
+import java.util.Set;
+
+import javax.swing.Timer;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.Abstract2DPanel;
 import com.google.common.collect.Sets;
@@ -16,65 +22,104 @@ import org.slf4j.LoggerFactory;
 public class SmallGame extends Abstract2DPanel {
 
   private static final Logger log = LoggerFactory.getLogger(SmallGame.class);
-  private static final int TILE_SIZE = 20;
+  private static final int[] DIRECTIONS = {KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT};
+  private static final int TILE_SIZE = 25;
+  private final KeyListener keyListener;
+  private final ActionListener actionListener;
+  private final Random random;
+  private final Timer timer;
   private final Floor floor;
-  private final HashSet<Location> remainingTokenLocations;
-  private Location currentPlayerLocation;  //currentPlayerLocation
+  private final Set<Location> remainingTokenLocations;
+  private final Set<Location> enemyLocations;
+  private Location currentPlayerLocation;
 
   public SmallGame() {
     this.floor = new FloorFactory().loadFloor("001");
     this.currentPlayerLocation = floor.getOriginalPlayerLocation();
     this.remainingTokenLocations = Sets.newHashSet(floor.getTokenLocations());
-    addKeyListener(new MyKeyListener());
+    this.enemyLocations = Sets.newConcurrentHashSet(floor.getEnemyLocations());
+    this.keyListener = new MyKeyListener();
+    this.actionListener = new AnimateEnemy();
+    this.random = new Random(0);
+    this.timer = new Timer(871, actionListener);
+    this.timer.start();
+    addKeyListener(keyListener);
   }
 
   @Override
   protected void paintComponent(Graphics2D g) {
-    log.info("repaint");
-    // NOTE: This enables KeyListener on JPanel. This has to be called after JFrame is set to visible
-    for (int row = 0; row < floor.getNumOfRows(); row++) {
-      for (int col = 0; col < floor.getNumOfCols(); col++) {
-        paintTile(g, row, col);
-      }
-    }
+    paintTiles(g);
     paintPlayer(g);
-    requestFocusInWindow();
+    paintEnemies(g);
+    if (enemyLocations.contains(currentPlayerLocation)) {
+      timer.stop();
+      removeKeyListener(keyListener);
+      g.setFont(new Font(null, Font.PLAIN, 69));
+      g.setColor(Color.RED);
+      g.drawString("Mission Failed", 50, 200);
+    }
     if (remainingTokenLocations.isEmpty()) {
       g.setFont(new Font(null, Font.PLAIN, 69));
+      g.setColor(Color.GREEN);
       g.drawString("Mission Accomplished", 10, 200);
     }
+    requestFocusInWindow(); // NOTE: This enables KeyListener on JPanel. This has to be called after JFrame is set to visible
   }
 
-  private void paintTile(Graphics2D g, int row, int col) {
-    switch (floor.getTileType(row, col)) {
-      case W:
-        g.setColor(Color.GRAY);
-        break;
-      case P:
-      case H:
-        g.setColor(Color.PINK);
-        break;
-      case T:
-        if (remainingTokenLocations.contains(Location.of(row, col))) {
-          g.setColor(Color.YELLOW);
-        } else {
-          // the token at this location has been taken
-          g.setColor(Color.PINK);
+  private void paintTiles(Graphics2D g) {
+    for (int row = 0; row < floor.getNumOfRows(); row++) {
+      for (int col = 0; col < floor.getNumOfCols(); col++) {
+        fillRect(g, row, col, Color.PINK);
+        switch (floor.getTileType(row, col)) {
+          case W:
+            fillRect(g, row, col, Color.GRAY);
+            break;
+          case T:
+            if (remainingTokenLocations.contains(Location.of(row, col))) {
+              fillOval(g, row, col, Color.YELLOW);
+            }
+            break;
         }
-        break;
-      default:
-        g.setColor(Color.RED);
+      }
     }
-    fillRect(g, row, col);
   }
 
   private void paintPlayer(Graphics2D g) {
-    g.setColor(Color.BLUE);
-    fillRect(g, currentPlayerLocation.row, currentPlayerLocation.col);
+    fillOval(g, currentPlayerLocation.row, currentPlayerLocation.col, Color.BLUE);
   }
 
-  private void fillRect(Graphics2D g, int row, int col) {
+  private void paintEnemies(Graphics2D g) {
+    enemyLocations.forEach(location -> fillOval(g, location.row, location.col, Color.RED));
+  }
+
+  private static void fillRect(Graphics2D g, int row, int col, Color color) {
+    g.setColor(color);
     g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+  }
+
+  private static void fillOval(Graphics2D g, int row, int col, Color color) {
+    g.setColor(color);
+    g.fillOval(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+  }
+
+  /**
+   * @param directionCode
+   * @param location
+   * @return destination {@link Location} or location
+   */
+  private Location getTargetLocation(int directionCode, Location location) {
+    switch (directionCode) {
+      case KeyEvent.VK_UP:
+        return floor.getNorthLocation(location);
+      case KeyEvent.VK_DOWN:
+        return floor.getSouthLocation(location);
+      case KeyEvent.VK_LEFT:
+        return floor.getWestLocation(location);
+      case KeyEvent.VK_RIGHT:
+        return floor.getEastLocation(location);
+      default:
+        return location;
+    }
   }
 
   private class MyKeyListener extends KeyAdapter {
@@ -82,27 +127,36 @@ public class SmallGame extends Abstract2DPanel {
     @Override
     public void keyPressed(KeyEvent event) {
       log.info("keytyped:{}", event);
-      Location destination = currentPlayerLocation;
-      switch (event.getKeyCode()) {
-        case KeyEvent.VK_UP:
-          destination = floor.getNorthLocation(currentPlayerLocation);
-          break;
-        case KeyEvent.VK_DOWN:
-          destination = floor.getSouthLocation(currentPlayerLocation);
-          break;
-        case KeyEvent.VK_LEFT:
-          destination = floor.getWestLocation(currentPlayerLocation);
-          break;
-        case KeyEvent.VK_RIGHT:
-          destination = floor.getEastLocation(currentPlayerLocation);
-          break;
-      }
-      if (destination != currentPlayerLocation) {
+      Location destination = getTargetLocation(event.getKeyCode(), currentPlayerLocation);
+
+      if (!destination.equals(currentPlayerLocation)) {
         currentPlayerLocation = destination;
         // TODO repaint only delta
         remainingTokenLocations.remove(currentPlayerLocation);
         repaint();
       }
+    }
+  }
+
+  private class AnimateEnemy implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+      Set<Location> destinations = Sets.newHashSet();
+      // Move locations of enemies
+      for (Location location : enemyLocations) {
+        Location destination = getTargetLocation(
+            DIRECTIONS[random.nextInt(DIRECTIONS.length)], location);
+        if (destinations.contains(destination) || enemyLocations.contains(destination)) {
+          // Enemy cannot move to a location another enemy is already on.
+          destinations.add(location);
+        } else {
+          destinations.add(destination);
+        }
+      }
+      enemyLocations.clear();
+      enemyLocations.addAll(destinations);
+      repaint();
     }
   }
 }

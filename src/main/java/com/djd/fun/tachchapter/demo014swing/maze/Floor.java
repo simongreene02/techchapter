@@ -39,7 +39,10 @@ public class Floor {
    */
   private final Location playerOriginalLocation;
 
+  private final ImmutableSet<Location> enemyLocations;
   private final ImmutableSet<Location> tokenLocations;
+
+
 
   /**
    * Create an instance of floor based on given floorPlan
@@ -58,6 +61,7 @@ public class Floor {
     this.numOfCols = floorPlan[0].length;
 
     ImmutableSet.Builder<Location> tokenLocationBuilder = ImmutableSet.builder();
+    ImmutableSet.Builder<Location> enemyLocationBuilder = ImmutableSet.builder();
     tiles = new Tile[floorPlan.length][floorPlan[0].length];
     Location playerLocation = null;
     for (int row = 0; row < numOfRows; row++) {
@@ -73,11 +77,14 @@ public class Floor {
           playerLocation = Location.of(row, col);
         } else if ('T' == tileType) {
           tokenLocationBuilder.add(Location.of(row, col));
+        } else if ('E' == tileType) {
+          enemyLocationBuilder.add(Location.of(row, col));
         }
         tiles[row][col] = Tile.of(row, col, tileType);
       }
     }
     this.playerOriginalLocation = checkNotNull(playerLocation);
+    this.enemyLocations = enemyLocationBuilder.build();
     this.tokenLocations = tokenLocationBuilder.build();
   }
 
@@ -106,6 +113,15 @@ public class Floor {
     return tokenLocations;
   }
 
+  public ImmutableSet<Location> getEnemyLocations() {
+    return enemyLocations;
+  }
+
+  public boolean isEnemyAt(Location location) {
+    isValidLocation(location);
+    return Tile.TileType.E == tiles[location.row][location.col].getTileType();
+  }
+
   /**
    * Return north location of specified location on the grid.
    *
@@ -114,7 +130,7 @@ public class Floor {
    * current location otherwise.
    */
   public Location getNorthLocation(Location location) {
-    if (location.row > 0 && location.row < tiles.length) {
+    if (location.row > 0 && location.row < numOfRows) {
       Location destination = Location.of(location.row - 1, location.col);
       if (canEnter(destination)) {
         return destination;
@@ -131,7 +147,7 @@ public class Floor {
    * current location otherwise.
    */
   public Location getEastLocation(Location location) {
-    if (location.col < tiles[location.row].length - 1) {
+    if (location.col < numOfCols - 1) {
       Location destination = Location.of(location.row, location.col + 1);
       if (canEnter(destination)) {
         return destination;
@@ -148,7 +164,7 @@ public class Floor {
    * current location otherwise.
    */
   public Location getSouthLocation(Location location) {
-    if (location.row < tiles.length - 1) {
+    if (location.row < numOfRows - 1) {
       Location destination = Location.of(location.row + 1, location.col);
       if (canEnter(destination)) {
         return destination;
@@ -165,7 +181,7 @@ public class Floor {
    * current location otherwise.
    */
   public Location getWestLocation(Location location) {
-    if (location.col > 0 && location.col < tiles[location.row].length) {
+    if (location.col > 0 && location.col < numOfCols) {
       Location destination = Location.of(location.row, location.col - 1);
       if (canEnter(destination)) {
         return destination;
@@ -207,7 +223,7 @@ public class Floor {
   }
 
   @VisibleForTesting boolean isValidLocation(Location location) {
-    return location.row >= 0 && location.row < tiles.length &&
-        location.col >= 0 && location.col < tiles[location.row].length;
+    return location.row >= 0 && location.row < numOfRows &&
+        location.col >= 0 && location.col < numOfCols;
   }
 }
