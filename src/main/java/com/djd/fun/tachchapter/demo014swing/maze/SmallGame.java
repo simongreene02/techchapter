@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.Timer;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.Abstract2DPanel;
+import com.djd.fun.tachchapter.demo014swing.maze.models.Location;
 import com.djd.fun.tachchapter.demo014swing.maze.shapes.StarPolygon;
 import com.djd.fun.tachchapter.demo014swing.maze.states.FloorStates;
 import com.google.common.collect.Sets;

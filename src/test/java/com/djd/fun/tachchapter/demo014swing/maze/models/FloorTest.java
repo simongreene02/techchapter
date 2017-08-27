@@ -1,6 +1,8 @@
 //  Copyright (c) 2016 JGD Licensed under the MIT license
-package com.djd.fun.tachchapter.demo014swing.maze;
+package com.djd.fun.tachchapter.demo014swing.maze.models;
 
+import com.djd.fun.tachchapter.demo014swing.maze.models.Floor;
+import com.djd.fun.tachchapter.demo014swing.maze.models.Location;
 import com.djd.fun.util.ExpectData;
 import com.djd.fun.util.PrintStreamTestHelper;
 

@@ -1,9 +1,10 @@
-package com.djd.fun.tachchapter.demo014swing.maze;
+package com.djd.fun.tachchapter.demo014swing.maze.models;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import com.djd.fun.tachchapter.demo014swing.maze.models.Floor;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;

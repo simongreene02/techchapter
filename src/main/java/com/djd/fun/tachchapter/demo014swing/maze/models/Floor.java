@@ -1,5 +1,5 @@
 //  Copyright (c) 2016 JGD Licensed under the MIT license
-package com.djd.fun.tachchapter.demo014swing.maze;
+package com.djd.fun.tachchapter.demo014swing.maze.models;
 
 import java.io.PrintStream;
 
@@ -10,8 +10,6 @@ import com.google.common.collect.ImmutableSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -29,8 +27,7 @@ public class Floor {
   private final int numOfCols;
 
   /**
-   * Tile dimension is immutable; however, array elements are mutable.
-   * TODO try to think make this immutable.
+   * Note: Do create public accessor to this reference. Keep it immutable.
    */
   private final Tile[][] tiles;
 

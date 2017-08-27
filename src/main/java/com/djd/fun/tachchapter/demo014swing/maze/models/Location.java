@@ -1,5 +1,5 @@
 //  Copyright (c) 2016 JGD Licensed under the MIT license
-package com.djd.fun.tachchapter.demo014swing.maze;
+package com.djd.fun.tachchapter.demo014swing.maze.models;
 
 import java.util.Objects;
 

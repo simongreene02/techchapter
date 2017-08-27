@@ -2,9 +2,9 @@ package com.djd.fun.tachchapter.demo014swing.maze.states;
 
 import java.util.Collection;
 
-import com.djd.fun.tachchapter.demo014swing.maze.FloorFactory;
-import com.djd.fun.tachchapter.demo014swing.maze.Location;
-import com.djd.fun.tachchapter.demo014swing.maze.Tile;
+import com.djd.fun.tachchapter.demo014swing.maze.models.FloorFactory;
+import com.djd.fun.tachchapter.demo014swing.maze.models.Location;
+import com.djd.fun.tachchapter.demo014swing.maze.models.Tile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
