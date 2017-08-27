@@ -1,7 +1,6 @@
 package com.djd.fun.tachchapter.demo014swing.maze;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,22 +11,32 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.Abstract2DPanel;
 import com.djd.fun.tachchapter.demo014swing.maze.models.Location;
-import com.djd.fun.tachchapter.demo014swing.maze.shapes.StarPolygon;
+import com.djd.fun.tachchapter.demo014swing.maze.models.MoreColors;
 import com.djd.fun.tachchapter.demo014swing.maze.states.FloorStates;
 import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillDiamond;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillOval;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillPolygon;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillRect;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillSmallOval;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillTriangleDown;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillTriangleUp;
+
 public class SmallGame extends Abstract2DPanel {
 
   private static final Logger log = LoggerFactory.getLogger(SmallGame.class);
   private static final int[] DIRECTIONS = {KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT};
   private static final int TILE_SIZE = 20; // Note Use even number to avoid loss of decimal
+
   private final KeyListener keyListener;
   private final ActionListener animateEnemy;
   private final ActionListener invincibleListener;
@@ -35,21 +44,25 @@ public class SmallGame extends Abstract2DPanel {
   private final Timer invincibleTimer;
   private final Timer emenyTimer;
   private final AtomicBoolean invincible;
-  private final FloorStates floorStates;
+  private FloorStates floorStates;
   private Location currentPlayerLocation;
 
   public SmallGame() {
-    this.floorStates = new FloorStates();
-    this.invincible = new AtomicBoolean();
-    this.currentPlayerLocation = floorStates.getOriginalPlayerLocation();
     this.keyListener = new MyKeyListener();
     this.animateEnemy = new AnimateEnemy();
     this.invincibleListener = new InvincibleMode();
     this.random = new Random(0);
+    this.invincible = new AtomicBoolean();
     this.invincibleTimer = new Timer(5000, invincibleListener);
-    this.invincibleTimer.setRepeats(false);
     this.emenyTimer = new Timer(777, animateEnemy);
-    this.emenyTimer.start();
+    init();
+  }
+
+  private void init() {
+    this.floorStates = new FloorStates();
+    this.currentPlayerLocation = floorStates.getOriginalPlayerLocation();
+    this.invincibleTimer.setRepeats(false);
+    this.emenyTimer.restart();
     addKeyListener(keyListener);
   }
 
@@ -58,6 +71,10 @@ public class SmallGame extends Abstract2DPanel {
     paintTiles(g);
     paintPlayer(g);
     paintEnemies(g);
+    requestFocusInWindow(); // NOTE: This enables KeyListener on JPanel. This has to be called after JFrame is set to visible
+  }
+
+  private void checkGameStatus() {
     if (floorStates.isEnemyAt(currentPlayerLocation)) {
       if (invincible.get()) {
         log.info("player invincible");
@@ -68,18 +85,21 @@ public class SmallGame extends Abstract2DPanel {
         // game over
         emenyTimer.stop();
         removeKeyListener(keyListener);
-        g.setFont(new Font(null, Font.PLAIN, 69));
-        g.setColor(Color.ORANGE);
-        g.drawString("Mission Failed", 50, 200);
+        showDialog("Mission Failed");
       }
     }
     if (floorStates.noMoreTokens()) {
       emenyTimer.stop();
-      g.setFont(new Font(null, Font.PLAIN, 69));
-      g.setColor(Color.GREEN);
-      g.drawString("Mission Accomplished", 10, 200);
+      removeKeyListener(keyListener);
+      showDialog("Mission Accomplished");
     }
-    requestFocusInWindow(); // NOTE: This enables KeyListener on JPanel. This has to be called after JFrame is set to visible
+  }
+
+  private void showDialog(String message) {
+    int n = JOptionPane.showConfirmDialog(this, message + " Reinitialize the Board?");
+    if (n == JOptionPane.YES_OPTION) {
+      init();
+    }
   }
 
   /**
@@ -93,20 +113,26 @@ public class SmallGame extends Abstract2DPanel {
 
     for (int row = 0; row < maxRows; row++) {
       for (int col = 0; col < maxCols; col++) {
-        fillRect(g, row, col, Color.PINK);
+        fillRect(g, row, col, MoreColors.LIGHT.GREEN, TILE_SIZE);
         switch (floorStates.getTileType(row, col)) {
           case W:
-            fillRect(g, row, col, Color.BLACK);
-            break;
-          case G:
-            if (floorStates.hasGemAt(Location.of(row, col))) {
-              fillDiamond(g, row, col, Color.MAGENTA);
-            }
+            fillRect(g, row, col, MoreColors.DARK.GREEN, TILE_SIZE);
             break;
           case T:
             if (floorStates.hasTokenAt(Location.of(row, col))) {
-              fillOval(g, row, col, Color.YELLOW);
+              fillSmallOval(g, row, col, MoreColors.LIGHT.BLUE, TILE_SIZE);
             }
+            break;
+          case G:
+            if (floorStates.hasGemAt(Location.of(row, col))) {
+              fillDiamond(g, row, col, MoreColors.DARK.VIOLET, TILE_SIZE);
+            }
+            break;
+          case D:
+            fillTriangleDown(g, row, col, MoreColors.DARK.BROWN, TILE_SIZE);
+            break;
+          case U:
+            fillTriangleUp(g, row, col, MoreColors.DARK.PURPLE, TILE_SIZE);
             break;
         }
       }
@@ -114,47 +140,13 @@ public class SmallGame extends Abstract2DPanel {
   }
 
   private void paintPlayer(Graphics2D g) {
-    Color color = invincible.get() ? Color.BLUE : Color.CYAN;
-    fillOval(g, currentPlayerLocation.row, currentPlayerLocation.col, color);
+    Color color = invincible.get() ? MoreColors.LIGHT.YELLOW : MoreColors.NEON.BLUE;
+    fillOval(g, currentPlayerLocation.row, currentPlayerLocation.col, color, TILE_SIZE);
   }
 
   private void paintEnemies(Graphics2D g) {
-    floorStates.getEnemyLocations().forEach(location -> fillPolygon(g, location.row, location.col, Color.RED));
-  }
-
-  private static void fillRect(Graphics2D g, int row, int col, Color color) {
-    g.setColor(color);
-    g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-  }
-
-  private static void fillOval(Graphics2D g, int row, int col, Color color) {
-    g.setColor(color);
-    g.fillOval(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-  }
-
-  private static void fillPolygon(Graphics2D g, int row, int col, Color color) {
-    int delta = TILE_SIZE / 2;
-    g.setColor(color);
-    g.fillPolygon(new StarPolygon(col * TILE_SIZE + delta, row * TILE_SIZE + delta, delta, delta / 2));
-  }
-
-  private static void fillDiamond(Graphics2D g, int row, int col, Color color) {
-    g.setColor(color);
-    int delta = TILE_SIZE / 2;
-    g.fillPolygon(
-        new int[]{
-            col * TILE_SIZE + delta,
-            col * TILE_SIZE + TILE_SIZE,
-            col * TILE_SIZE + delta,
-            col * TILE_SIZE
-        },
-        new int[]{
-            row * TILE_SIZE,
-            row * TILE_SIZE + delta,
-            row * TILE_SIZE + TILE_SIZE,
-            row * TILE_SIZE + delta
-        },
-        4);
+    floorStates.getEnemyLocations()
+        .forEach(location -> fillPolygon(g, location.row, location.col, Color.RED, TILE_SIZE));
   }
 
   /**
@@ -201,6 +193,7 @@ public class SmallGame extends Abstract2DPanel {
         invincibleTimer.restart();
       }
       repaint();
+      checkGameStatus();
 
     }
   }
@@ -233,7 +226,7 @@ public class SmallGame extends Abstract2DPanel {
       }
       floorStates.refreshEnemyLocations(destinations);
       repaint();
+      checkGameStatus();
     }
   }
-
 }
