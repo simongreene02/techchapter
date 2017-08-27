@@ -1,14 +1,21 @@
 package com.djd.fun.tachchapter.demo014swing;
 
+import java.awt.Font;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.UIManager;
 
 import com.djd.fun.tachchapter.demo014swing.actions.CloseAction;
 
 public class MyMenuBar extends JMenuBar {
 
   public MyMenuBar(MyPanel myPanel) {
+    Font f = new Font("sans-serif", Font.PLAIN, 12);
+    UIManager.put("Menu.font", f);
+    UIManager.put("MenuItem.font", f);
+
     super.add(createFileMenu());
     super.add(createDemoMenu(myPanel));
   }

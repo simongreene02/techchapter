@@ -38,11 +38,9 @@ public class Floor {
    * This is player's original location. Floor does NOT keep current player location.
    */
   private final Location playerOriginalLocation;
-
   private final ImmutableSet<Location> enemyLocations;
   private final ImmutableSet<Location> tokenLocations;
-
-
+  private final ImmutableSet<Location> gemLocations;
 
   /**
    * Create an instance of floor based on given floorPlan
@@ -62,6 +60,7 @@ public class Floor {
 
     ImmutableSet.Builder<Location> tokenLocationBuilder = ImmutableSet.builder();
     ImmutableSet.Builder<Location> enemyLocationBuilder = ImmutableSet.builder();
+    ImmutableSet.Builder<Location> gemLocationBuilder = ImmutableSet.builder();
     tiles = new Tile[floorPlan.length][floorPlan[0].length];
     Location playerLocation = null;
     for (int row = 0; row < numOfRows; row++) {
@@ -79,6 +78,8 @@ public class Floor {
           tokenLocationBuilder.add(Location.of(row, col));
         } else if ('E' == tileType) {
           enemyLocationBuilder.add(Location.of(row, col));
+        } else if ('G' == tileType) {
+          gemLocationBuilder.add(Location.of(row, col));
         }
         tiles[row][col] = Tile.of(row, col, tileType);
       }
@@ -86,6 +87,7 @@ public class Floor {
     this.playerOriginalLocation = checkNotNull(playerLocation);
     this.enemyLocations = enemyLocationBuilder.build();
     this.tokenLocations = tokenLocationBuilder.build();
+    this.gemLocations = gemLocationBuilder.build();
   }
 
   public int getNumOfRows() {
@@ -115,6 +117,10 @@ public class Floor {
 
   public ImmutableSet<Location> getEnemyLocations() {
     return enemyLocations;
+  }
+
+  public ImmutableSet<Location> getGemLocations() {
+    return gemLocations;
   }
 
   public boolean isEnemyAt(Location location) {

@@ -55,7 +55,7 @@ public class MyPanel extends JPanel implements ActionListener {
 
   @Override
   public Dimension getPreferredSize() {
-    return new Dimension(700, 500);
+    return new Dimension(800, 500);
   }
 
   /**

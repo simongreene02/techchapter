@@ -14,6 +14,7 @@ public class Tile {
     W('W', "wall", false),
     H(' ', "Hollow", true),
     T('T', "Token", true),
+    G('G', "Gen", true),
     E('E', "Enemy", true),
     P('P', "Player", true);
 
