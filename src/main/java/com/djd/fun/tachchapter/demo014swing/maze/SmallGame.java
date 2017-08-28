@@ -54,8 +54,7 @@ public class SmallGame extends Abstract2DPanel {
     this.random = new Random(0);
     this.invincible = new AtomicBoolean();
     this.invincibleTimer = new Timer(5000, invincibleListener);
-    this.emenyTimer = new Timer(100777, animateEnemy);
-    init();
+    this.emenyTimer = new Timer(777, animateEnemy);
   }
 
   @Override
@@ -64,6 +63,7 @@ public class SmallGame extends Abstract2DPanel {
     this.currentPlayerLocation = floorStates.getOriginalPlayerLocation();
     this.invincibleTimer.setRepeats(false);
     this.emenyTimer.restart();
+    removeKeyListener(keyListener);
     addKeyListener(keyListener);
   }
 
