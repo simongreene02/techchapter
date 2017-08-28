@@ -1,6 +1,9 @@
 package com.djd.fun.tachchapter.demo014swing.maze.shapes;
 
+import com.google.common.testing.EqualsTester;
+
 import org.junit.Test;
+import org.mockito.internal.matchers.Equality;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -35,5 +38,15 @@ public class DiamondTest {
   @Test(expected = IllegalArgumentException.class)
   public void with_badSize() {
     Diamond.with(0, 0, 0);
+  }
+
+  @Test
+  public void equality() {
+    new EqualsTester()
+        .addEqualityGroup(Diamond.with(0,0,20), Diamond.with(0,0,20))
+        .addEqualityGroup(Diamond.with(1,0,20))
+        .addEqualityGroup(Diamond.with(0,1,20))
+        .addEqualityGroup(Diamond.with(0,0,80))
+        .testEquals();
   }
 }

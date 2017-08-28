@@ -1,5 +1,7 @@
 package com.djd.fun.tachchapter.demo014swing.maze.shapes;
 
+import com.google.common.testing.EqualsTester;
+
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -51,5 +53,19 @@ public class TriangleTest {
   @Test(expected = IllegalArgumentException.class)
   public void up_badSize() {
     Triangle.up(0, 0, 0);
+  }
+
+  @Test
+  public void equality() {
+    new EqualsTester()
+        .addEqualityGroup(Triangle.up(0, 0, 20), Triangle.up(0, 0, 20))
+        .addEqualityGroup(Triangle.down(0, 0, 20), Triangle.down(0, 0, 20))
+        .addEqualityGroup(Triangle.up(1, 0, 20))
+        .addEqualityGroup(Triangle.up(0, 1, 20))
+        .addEqualityGroup(Triangle.up(0, 0, 80))
+        .addEqualityGroup(Triangle.down(1, 0, 20))
+        .addEqualityGroup(Triangle.down(0, 1, 20))
+        .addEqualityGroup(Triangle.down(0, 0, 80))
+        .testEquals();
   }
 }

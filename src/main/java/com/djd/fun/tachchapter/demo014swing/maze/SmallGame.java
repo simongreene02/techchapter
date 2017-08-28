@@ -17,25 +17,26 @@ import javax.swing.Timer;
 import com.djd.fun.tachchapter.demo014swing.canvas.Abstract2DPanel;
 import com.djd.fun.tachchapter.demo014swing.maze.models.Location;
 import com.djd.fun.tachchapter.demo014swing.maze.models.MoreColors;
+import com.djd.fun.tachchapter.demo014swing.maze.models.Tile;
+import com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper;
 import com.djd.fun.tachchapter.demo014swing.maze.states.FloorStates;
 import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillDiamond;
-import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillOval;
-import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillPolygon;
-import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillRect;
-import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillSmallOval;
-import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillTriangleDown;
-import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.fillTriangleUp;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.paintGem;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.paintEnemy;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.paintWall;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.paintToken;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.paintDownstairs;
+import static com.djd.fun.tachchapter.demo014swing.maze.shapes.ShapeHelper.paintUpstairs;
 
 public class SmallGame extends Abstract2DPanel {
 
   private static final Logger log = LoggerFactory.getLogger(SmallGame.class);
   private static final int[] DIRECTIONS = {KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT};
-  private static final int TILE_SIZE = 20; // Note Use even number to avoid loss of decimal
+  private static final int TILE_SIZE = 21; // Note Use even number to avoid loss of decimal
 
   private final KeyListener keyListener;
   private final ActionListener animateEnemy;
@@ -63,7 +64,7 @@ public class SmallGame extends Abstract2DPanel {
     this.currentPlayerLocation = floorStates.getOriginalPlayerLocation();
     this.invincibleTimer.setRepeats(false);
     this.emenyTimer.restart();
-    removeKeyListener(keyListener);
+    removeKeyListener(keyListener); // Just making sure
     addKeyListener(keyListener);
   }
 
@@ -114,26 +115,30 @@ public class SmallGame extends Abstract2DPanel {
 
     for (int row = 0; row < maxRows; row++) {
       for (int col = 0; col < maxCols; col++) {
-        fillRect(g, row, col, MoreColors.LIGHT.GREEN, TILE_SIZE);
-        switch (floorStates.getTileType(row, col)) {
+        Tile.TileType tileType = floorStates.getTileType(row, col);
+        if (tileType != Tile.TileType.W) {
+          // This is technically not a wall but back ground tile or hollow tile
+          paintWall(g, row, col, MoreColors.LIGHT.GREEN, TILE_SIZE);
+        }
+        switch (tileType) {
           case W:
-            fillRect(g, row, col, MoreColors.DARK.GREEN, TILE_SIZE);
+            paintWall(g, row, col, MoreColors.DARK.GREEN, TILE_SIZE);
             break;
           case T:
             if (floorStates.hasTokenAt(Location.of(row, col))) {
-              fillSmallOval(g, row, col, MoreColors.LIGHT.BLUE, TILE_SIZE);
+              paintToken(g, row, col, MoreColors.LIGHT.BLUE, TILE_SIZE);
             }
             break;
           case G:
             if (floorStates.hasGemAt(Location.of(row, col))) {
-              fillDiamond(g, row, col, MoreColors.DARK.VIOLET, TILE_SIZE);
+              paintGem(g, row, col, MoreColors.DARK.VIOLET, TILE_SIZE);
             }
             break;
           case D:
-            fillTriangleDown(g, row, col, MoreColors.DARK.BROWN, TILE_SIZE);
+            paintDownstairs(g, row, col, MoreColors.DARK.BROWN, TILE_SIZE);
             break;
           case U:
-            fillTriangleUp(g, row, col, MoreColors.DARK.PURPLE, TILE_SIZE);
+            paintUpstairs(g, row, col, MoreColors.DARK.PURPLE, TILE_SIZE);
             break;
         }
       }
@@ -142,12 +147,12 @@ public class SmallGame extends Abstract2DPanel {
 
   private void paintPlayer(Graphics2D g) {
     Color color = invincible.get() ? MoreColors.LIGHT.YELLOW : MoreColors.NEON.BLUE;
-    fillOval(g, currentPlayerLocation.row, currentPlayerLocation.col, color, TILE_SIZE);
+    ShapeHelper.paintPlayer(g, currentPlayerLocation.row, currentPlayerLocation.col, color, TILE_SIZE);
   }
 
   private void paintEnemies(Graphics2D g) {
     floorStates.getEnemyLocations()
-        .forEach(location -> fillPolygon(g, location.row, location.col, Color.RED, TILE_SIZE));
+        .forEach(location -> paintEnemy(g, location.row, location.col, Color.RED, TILE_SIZE));
   }
 
   /**

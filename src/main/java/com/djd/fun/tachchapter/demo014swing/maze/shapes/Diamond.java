@@ -1,10 +1,12 @@
 package com.djd.fun.tachchapter.demo014swing.maze.shapes;
 
 import java.awt.Polygon;
+import java.util.Arrays;
+import java.util.Objects;
 
 import com.djd.fun.util.MorePreconditions;
 
-public class Diamond extends Polygon {
+public class Diamond extends BasePolygon {
 
   private Diamond(Builder builder) {
     super(builder.xCoordinates, builder.yCoordinates, 4);

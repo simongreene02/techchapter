@@ -1,10 +1,8 @@
 package com.djd.fun.tachchapter.demo014swing.maze.shapes;
 
-import java.awt.Polygon;
-
 import com.djd.fun.util.MorePreconditions;
 
-public class Triangle extends Polygon {
+public class Triangle extends BasePolygon {
 
   enum Direction {
     UP, DOWN, LEFT, RIGHT

@@ -1,51 +1,112 @@
 package com.djd.fun.tachchapter.demo014swing.maze.shapes;
 
-import java.awt.Polygon;
+import com.djd.fun.util.MorePreconditions;
 
 /**
- * This class was from http://java-sl.com/shapes.html
+ * This class was created based on the implementations found in http://java-sl.com/shapes.html
  */
-public class StarPolygon extends Polygon {
+public class StarPolygon extends BasePolygon {
 
-  public StarPolygon(int x, int y, int r, int innerR) {
-    this(x, y, r, innerR, 7, 0);
+  public StarPolygon(Builder builder) {
+    super(builder.xCoordinates, builder.yCoordinates, builder.vertexCount * 2);
   }
 
-  public StarPolygon(int x, int y, int r, int innerR, int vertexCount) {
-    this(x, y, r, innerR, vertexCount, 0);
+  public static StarPolygon with(int row, int col, int size) {
+    return new Builder(size).row(row).col(col).r(size/2).innerR(size/4).build();
   }
 
-  public StarPolygon(int x, int y, int r, int innerR, int vertexCount, double startAngle) {
-    super(getXCoordinates(x, y, r, innerR, vertexCount, startAngle)
-        , getYCoordinates(x, y, r, innerR, vertexCount, startAngle)
-        , vertexCount * 2);
-  }
-
-  protected static int[] getXCoordinates(int x, int y, int r, int innerR, int vertexCount, double startAngle) {
-    int res[] = new int[vertexCount * 2];
-    double addAngle = 2 * Math.PI / vertexCount;
-    double angle = startAngle;
-    double innerAngle = startAngle + Math.PI / vertexCount;
-    for (int i = 0; i < vertexCount; i++) {
-      res[i * 2] = (int)Math.round(r * Math.cos(angle)) + x;
-      angle += addAngle;
-      res[i * 2 + 1] = (int)Math.round(innerR * Math.cos(innerAngle)) + x;
-      innerAngle += addAngle;
+  private static class Builder {
+    private final int delta;
+    private final int size;
+    private int x;
+    private int y;
+    private int r;
+    private int innerR;
+    private int vertexCount = 7;
+    private double startAngle = 0.0;
+    private int[] xCoordinates;
+    private int[] yCoordinates;
+    private Triangle.Direction direction = Triangle.Direction.UP;
+    public Builder(int size) {
+      MorePreconditions.checkPositiveIntegers(size);
+      this.size = size;
+      this.delta = size / 2;
     }
-    return res;
-  }
 
-  protected static int[] getYCoordinates(int x, int y, int r, int innerR, int vertexCount, double startAngle) {
-    int res[] = new int[vertexCount * 2];
-    double addAngle = 2 * Math.PI / vertexCount;
-    double angle = startAngle;
-    double innerAngle = startAngle + Math.PI / vertexCount;
-    for (int i = 0; i < vertexCount; i++) {
-      res[i * 2] = (int)Math.round(r * Math.sin(angle)) + y;
-      angle += addAngle;
-      res[i * 2 + 1] = (int)Math.round(innerR * Math.sin(innerAngle)) + y;
-      innerAngle += addAngle;
+    public Builder r(int r) {
+      this.r = r;
+      return this;
     }
-    return res;
+
+    public Builder innerR(int innerR) {
+      this.innerR = innerR;
+      return this;
+    }
+
+    public Builder vertexCount(int vertexCount) {
+      this.vertexCount = vertexCount;
+      return this;
+    }
+
+    public Builder startAngle(double startAngle) {
+      this.startAngle = startAngle;
+      return this;
+    }
+
+    /**
+     * Helper conversion setter for y
+     * @param row
+     * @return
+     */
+    public Builder row(int row) {
+      this.y = row * size + delta;
+      return this;
+    }
+
+    /**
+     * Helper conversion setter for x
+     * @param col
+     * @return
+     */
+    public Builder col(int col) {
+      this.x = col * size + delta;
+      return this;
+    }
+
+    private int[] getXCoordinates() {
+      int res[] = new int[vertexCount * 2];
+      double addAngle = 2 * Math.PI / vertexCount;
+      double angle = startAngle;
+      double innerAngle = startAngle + Math.PI / vertexCount;
+      for (int i = 0; i < vertexCount; i++) {
+        res[i * 2] = (int)Math.round(r * Math.cos(angle)) + x;
+        angle += addAngle;
+        res[i * 2 + 1] = (int)Math.round(innerR * Math.cos(innerAngle)) + x;
+        innerAngle += addAngle;
+      }
+      return res;
+    }
+
+    private int[] getYCoordinates() {
+      int res[] = new int[vertexCount * 2];
+      double addAngle = 2 * Math.PI / vertexCount;
+      double angle = startAngle;
+      double innerAngle = startAngle + Math.PI / vertexCount;
+      for (int i = 0; i < vertexCount; i++) {
+        res[i * 2] = (int)Math.round(r * Math.sin(angle)) + y;
+        angle += addAngle;
+        res[i * 2 + 1] = (int)Math.round(innerR * Math.sin(innerAngle)) + y;
+        innerAngle += addAngle;
+      }
+      return res;
+    }
+
+    private StarPolygon build() {
+      MorePreconditions.checkNonNegativeIntegers(x, y, innerR);
+      MorePreconditions.checkPositiveIntegers(vertexCount);
+      xCoordinates = getXCoordinates();
+      yCoordinates = getYCoordinates();
+      return new StarPolygon(this);
+    }
   }
 }
