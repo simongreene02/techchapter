@@ -27,4 +27,9 @@ public abstract class Abstract2DPanel extends JPanel implements CommandResponder
   public Document getDocument() {
     return new PlainDocument();
   }
+
+  @Override
+  public void init() {
+
+  }
 }

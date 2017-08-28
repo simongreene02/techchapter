@@ -68,6 +68,7 @@ public class MyPanel extends JPanel implements ActionListener {
     log.info("action command: " + event.getActionCommand());
     removeAll(); // remove previous component from this panel
     CommandResponder commandResponder = components.get(event.getActionCommand());
+    commandResponder.init();
     add(commandResponder.getComponent(), CENTER); // add selected component to this panel
     add(new CommandPanel(commandResponder.getDocument()), NORTH);
     revalidate(); // refresh the view

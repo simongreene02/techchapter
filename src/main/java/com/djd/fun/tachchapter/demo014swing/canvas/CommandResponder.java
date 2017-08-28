@@ -8,4 +8,8 @@ public interface CommandResponder {
   Component getComponent();
 
   Document getDocument();
+
+  default void init() {
+
+  }
 }

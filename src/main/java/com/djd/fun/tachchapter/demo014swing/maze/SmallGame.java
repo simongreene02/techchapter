@@ -58,7 +58,8 @@ public class SmallGame extends Abstract2DPanel {
     init();
   }
 
-  private void init() {
+  @Override
+  public void init() {
     this.floorStates = new FloorStates();
     this.currentPlayerLocation = floorStates.getOriginalPlayerLocation();
     this.invincibleTimer.setRepeats(false);
