@@ -45,7 +45,7 @@ public class ShapeHelper {
     int adjustedRectSize = size - (smaller * 2);
     g.setColor(color);
     g.drawRect(col * size + smaller, row * size + smaller, adjustedRectSize, adjustedRectSize);
-    g.fill(new Triangle(row, col, size));
+    g.fill(Triangle.up(row, col, size));
   }
 
   public static void fillTriangleDown(Graphics2D g, int row, int col, Color color, int size) {
@@ -53,7 +53,7 @@ public class ShapeHelper {
     int adjustedRectSize = size - (smaller * 2);
     g.setColor(color);
     g.drawRect(col * size + smaller, row * size + smaller, adjustedRectSize, adjustedRectSize);
-    g.fill(new TriangleDown(row, col, size));
+    g.fill(Triangle.down(row, col, size));
   }
 
   public static void drawString(Graphics2D g, int x, int y, String message, int size, Color color) {
@@ -61,5 +61,4 @@ public class ShapeHelper {
     g.setColor(color);
     g.drawString(message, x, y);
   }
-
 }
