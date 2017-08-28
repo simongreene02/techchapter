@@ -100,8 +100,7 @@ public class Floor {
   }
 
   public Tile.TileType getTileType(int row, int col) {
-    MorePreconditions.checkWholeNumber(row);
-    MorePreconditions.checkWholeNumber(col);
+    MorePreconditions.checkNonNegativeIntegers(row, col);
     if (row >= numOfRows || col >= numOfCols) {
       throw new IllegalArgumentException("[row,col] is out of bound.");
     }
@@ -133,6 +132,7 @@ public class Floor {
    * current location otherwise.
    */
   public Location getNorthLocation(Location location) {
+    log.info("location {}", location);
     if (location.row > 0 && location.row < numOfRows) {
       Location destination = Location.of(location.row - 1, location.col);
       if (canEnter(destination)) {

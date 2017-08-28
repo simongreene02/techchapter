@@ -44,9 +44,10 @@ public class Tile {
   private final TileType tileType;
 
   protected Tile(int x, int y, char tileLetter) {
-    this.x = MorePreconditions.checkWholeNumber(x);
-    this.y = MorePreconditions.checkWholeNumber(y);
+    MorePreconditions.checkNonNegativeIntegers(x, y);
     this.tileType = TileType.valueOf(String.valueOf(tileLetter));
+    this.x = x;
+    this.y = y;
   }
 
   /**

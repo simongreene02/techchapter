@@ -18,8 +18,9 @@ public class Location {
   public final int col; // 0 based column index
 
   private Location(int row, int col) {
-    this.row = MorePreconditions.checkWholeNumber(row);
-    this.col = MorePreconditions.checkWholeNumber(col);
+    MorePreconditions.checkNonNegativeIntegers(row, col);
+    this.row = row;
+    this.col = col;
   }
 
   /**

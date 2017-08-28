@@ -4,10 +4,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Collection of static helper methods
  */
 public class ShapeHelper {
+
+  private static final Logger log = LoggerFactory.getLogger(ShapeHelper.class);
+
   private ShapeHelper() {
     // no instance
   }
@@ -37,7 +43,7 @@ public class ShapeHelper {
 
   public static void fillDiamond(Graphics2D g, int row, int col, Color color, int size) {
     g.setColor(color);
-    g.fill(new Diamond(row, col, size));
+    g.fill(Diamond.with(row, col, size));
   }
 
   public static void fillTriangleUp(Graphics2D g, int row, int col, Color color, int size) {

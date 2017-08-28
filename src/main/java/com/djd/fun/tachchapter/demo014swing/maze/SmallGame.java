@@ -54,7 +54,7 @@ public class SmallGame extends Abstract2DPanel {
     this.random = new Random(0);
     this.invincible = new AtomicBoolean();
     this.invincibleTimer = new Timer(5000, invincibleListener);
-    this.emenyTimer = new Timer(777, animateEnemy);
+    this.emenyTimer = new Timer(100777, animateEnemy);
     init();
   }
 
@@ -174,6 +174,7 @@ public class SmallGame extends Abstract2DPanel {
 
     @Override
     public void keyPressed(KeyEvent event) {
+      log.info("Key event: {}", event);
       Location destination = getTargetLocation(event.getKeyCode(), currentPlayerLocation);
       if (destination.equals(currentPlayerLocation)) {
         return;
