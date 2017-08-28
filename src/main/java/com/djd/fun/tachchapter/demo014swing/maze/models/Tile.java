@@ -21,7 +21,6 @@ public class Tile {
     P('P', "Player", true);
 
     private final char printableLetter;
-
     private final String name;
     private final boolean steppable;
     TileType(char printableLetter, String name, boolean steppable) {
@@ -32,10 +31,6 @@ public class Tile {
 
     public char getPrintableLetter() {
       return printableLetter;
-    }
-
-    public String getName() {
-      return name;
     }
 
     public boolean isSteppable() {
