@@ -41,7 +41,7 @@ public class Demo003g {
       ScheduledFuture<?> future = service.scheduleAtFixedRate(
           makeTask("A", 1), initDelay, delayRate, TimeUnit.SECONDS);
       log.info("delay: {}", future.getDelay(TimeUnit.SECONDS));
-      TimeUnit.SECONDS.sleep(10);
+      TimeUnit.SECONDS.sleep(3);
     } catch (InterruptedException e) {
       throw Throwables.propagate(e);
     } finally {

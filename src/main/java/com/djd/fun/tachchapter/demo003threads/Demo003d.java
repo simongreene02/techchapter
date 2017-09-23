@@ -47,7 +47,7 @@ public class Demo003d {
       // This invokeAny call blocks current/main thread until first task returns.
       // Tasks that have not completed are cancelled.
       String result =
-          service.invokeAny(ImmutableList.of(makeTask("A", 13), makeTask("B", 12), makeTask("C", 1)));
+          service.invokeAny(ImmutableList.of(makeTask("A", 13), makeTask("B", 1), makeTask("C", 17)));
       log.info("Winner is Task {} ", result);
     } catch (InterruptedException | ExecutionException e) {
       log.warn("task was interrupted");

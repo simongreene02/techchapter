@@ -15,11 +15,12 @@ import org.slf4j.LoggerFactory;
  * @since 8/27/16
  */
 public class Threads {
+  private static final Logger log = LoggerFactory.getLogger(Threads.class);
+
   public static String findCurrentThreadName() {
     return Thread.currentThread().getName();
   }
 
-  private static final Logger log = LoggerFactory.getLogger(Threads.class);
 
   /**
    * Put current thread to sleep for the specified duration.
