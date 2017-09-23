@@ -72,6 +72,7 @@ public class MyPanel extends JPanel implements ActionListener {
     add(commandResponder.getComponent(), CENTER); // add selected component to this panel
     add(new CommandPanel(commandResponder.getDocument()), NORTH);
     revalidate(); // refresh the view
+    repaint();
   }
 
   /**

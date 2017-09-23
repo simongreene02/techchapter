@@ -32,7 +32,7 @@ public class CirculatorPanel extends JPanel implements CommandResponder {
 
   private static final Logger log = LoggerFactory.getLogger(CirculatorPanel.class);
   private static final @RegEx Pattern NUMBERS = Pattern.compile("^\\s*\\d+(\\s+\\d+)*\\s*$");
-  private static final Splitter ON_SPACES = Splitter.on(CharMatcher.WHITESPACE).omitEmptyStrings();
+  private static final Splitter ON_SPACES = Splitter.on(CharMatcher.breakingWhitespace()).omitEmptyStrings();
   private final Canvas canvas;
   private final Document document;
   private List<Integer> numbers;
@@ -71,6 +71,9 @@ public class CirculatorPanel extends JPanel implements CommandResponder {
         numbers = ON_SPACES.splitToList(inputValue).stream()
             .map(Integer::parseInt).collect(Collectors.toList());
         repaint();
+      } else if (inputValue.trim().isEmpty()) {
+    	  numbers.clear();
+    	  repaint();
       }
     } catch (BadLocationException e) {
       throw new RuntimeException(e);
