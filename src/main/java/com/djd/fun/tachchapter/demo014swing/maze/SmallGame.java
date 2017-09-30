@@ -13,6 +13,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import com.djd.fun.tachchapter.demo014swing.canvas.Abstract2DPanel;
 import com.djd.fun.tachchapter.demo014swing.maze.models.Location;
@@ -41,9 +43,10 @@ public class SmallGame extends Abstract2DPanel {
   private final KeyListener keyListener;
   private final ActionListener animateEnemy;
   private final ActionListener invincibleListener;
+  private final AncestorListener ancestorListener;
   private final Random random;
   private final Timer invincibleTimer;
-  private final Timer emenyTimer;
+  private final Timer enemyTimer;
   private final AtomicBoolean invincible;
   private FloorStates floorStates;
   private Location currentPlayerLocation;
@@ -55,7 +58,8 @@ public class SmallGame extends Abstract2DPanel {
     this.random = new Random(0);
     this.invincible = new AtomicBoolean();
     this.invincibleTimer = new Timer(5000, invincibleListener);
-    this.emenyTimer = new Timer(777, animateEnemy);
+    this.enemyTimer = new Timer(777, animateEnemy);
+    this.ancestorListener = new MyAncestorListener();
   }
 
   @Override
@@ -63,9 +67,11 @@ public class SmallGame extends Abstract2DPanel {
     this.floorStates = new FloorStates();
     this.currentPlayerLocation = floorStates.getOriginalPlayerLocation();
     this.invincibleTimer.setRepeats(false);
-    this.emenyTimer.restart();
+    this.enemyTimer.restart();
     removeKeyListener(keyListener); // Just making sure
     addKeyListener(keyListener);
+    removeAncestorListener(ancestorListener);
+    addAncestorListener(ancestorListener);
   }
 
   @Override
@@ -85,13 +91,13 @@ public class SmallGame extends Abstract2DPanel {
       } else {
         log.info("player not invincible");
         // game over
-        emenyTimer.stop();
+        enemyTimer.stop();
         removeKeyListener(keyListener);
         showDialog("Mission Failed");
       }
     }
     if (floorStates.noMoreTokens()) {
-      emenyTimer.stop();
+      enemyTimer.stop();
       removeKeyListener(keyListener);
       showDialog("Mission Accomplished");
     }
@@ -236,4 +242,24 @@ public class SmallGame extends Abstract2DPanel {
       checkGameStatus();
     }
   }
+  private class MyAncestorListener implements AncestorListener {
+
+		@Override
+		public void ancestorAdded(AncestorEvent event) {
+			log.info("ancestorAdded");
+			enemyTimer.start();
+		}
+
+		@Override
+		public void ancestorRemoved(AncestorEvent event) {
+			log.info("ancestorRemoved");
+			enemyTimer.stop();
+			
+		}
+
+		@Override
+		public void ancestorMoved(AncestorEvent event) {
+			log.info("ancestorMoved");
+		}
+	}
 }
